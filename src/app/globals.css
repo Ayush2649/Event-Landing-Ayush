@@ -1,9 +1,12 @@
+/* * { box-sizing: border-box; } */
+
 body {
   margin: 0;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   line-height: 1.6;
   color: #222;
-  background-color: #7C4DFF;
+  overflow-x: hidden;
+  /* background-color: #7C4DFF; */
 }
 
 section {
@@ -25,16 +28,16 @@ p {
 
 .hero {
   position: relative;
-  min-height: 60vh;
-  /* width: 100%; */
+  min-height: 100vh;
+  padding: 8rem 4rem 4rem;
 
-  background-size: cover;
-  background-position: right center;
+  background-image: url("/hero-bg.png");
+  background-size: 115% auto;   /* 👈 gentle stretch */
+  background-position: 80% center;
   background-repeat: no-repeat;
 
   display: flex;
   align-items: center;
-  justify-content: center;
 }
 
 /* Full overlay */

@@ -1,0 +1,50 @@
+.header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;              /* 👈 IMPORTANT */
+  z-index: 20;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 1.5rem 4rem;
+  max-width: 100vw;      /* 👈 PREVENT OVERFLOW */
+  overflow-x: hidden;   /* 👈 SAFETY */
+}
+
+/* LOGO */
+.logo {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #1f2937;
+  text-decoration: none;  /* 👈 ADDED FOR LINK */
+}
+
+/* NAV */
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.nav a {
+  text-decoration: none;
+  font-weight: 500;
+  color: #1f2937;
+  transition: color 0.2s ease;
+}
+
+.nav a:hover {
+  color: #00bfff;
+}
+
+/* LOGIN BUTTON */
+.loginBtn {
+  padding: 0.5rem 1.2rem;
+  border-radius: 6px;
+  background: #00bfff;
+  color: #ffffff !important;
+  font-weight: 600;
+}

@@ -1,0 +1,109 @@
+.page {
+  background: #faf7f2;
+  min-height: 100vh;
+}
+
+/* HERO SECTION */
+.hero {
+  position: relative;
+  min-height: 85vh;
+  padding: 6rem 4rem 4rem;
+  background-image: url("/hero-bg.png");
+  background-size: cover;
+  background-position: center bottom;
+  display: flex;
+  align-items: center;
+}
+
+/* Gradient overlay to protect text */
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    rgba(250, 247, 242, 0.95) 40%,
+    rgba(250, 247, 242, 0.6) 65%,
+    rgba(250, 247, 242, 0) 100%
+  );
+}
+
+.heroContent {
+  position: relative;
+  max-width: 600px;
+  z-index: 2;
+}
+
+.heroContent h1 {
+  font-size: 3.2rem;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+  color: #1f2937;
+}
+
+.heroContent p {
+  font-size: 1.2rem;
+  color: #374151;
+  margin-bottom: 2rem;
+}
+
+.heroButton {
+  padding: 0.9rem 1.8rem;
+  background: #00bfff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* FEATURED EVENTS */
+.featured {
+  padding: 4rem 2rem;
+  background: #EBF4FF;
+}
+
+.featured h2 {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.eventGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.eventCard {
+  background: #ffffff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.eventImage {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.eventContent {
+  padding: 1.5rem;
+}
+
+.eventContent h3 {
+  margin-bottom: 0.5rem;
+}
+
+.eventContent p {
+  color: #555;
+}
+
+/* FOOTER */
+.footer {
+  padding: 2rem;
+  text-align: center;
+  background: #00bfff;
+  /* margin-top: 4rem; */
+}
