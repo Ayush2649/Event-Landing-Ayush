@@ -9,32 +9,30 @@ export default function CreateEvent() {
     location: "",
     event_date: "",
     description: "",
-    banner_imaage: null,
+    speaker_name: "",
+    speaker_bio: "",
+    schedule_time: "",
+    schedule_title: "",
   });
 
   function handleChange(e) {
-    const { name, value, files } = e.target;
-
-    setForm({
-      ...form,
-      [name]: files ? files[0] : value,
-    });
+    setForm({ ...form, [e.target.name]: e.target.value });
   }
 
   async function handleSubmit(e) {
     e.preventDefault();
 
-    const formData = new FormData();
-    Object.entries(form).forEach(([key, value]) => {
-      formData.append(key, value);
-    });
-
-    await fetch("/api/create-event", {
+    const res = await fetch("/api/create-event", {
       method: "POST",
-      body: formData,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(form),
     });
 
-    alert("Event created successfully!");
+    if (res.ok) {
+      alert("Event created with speakers & schedule!");
+    } else {
+      alert("Failed to create event");
+    }
   }
 
   return (
@@ -43,30 +41,19 @@ export default function CreateEvent() {
         <h1>Create Event</h1>
 
         <form onSubmit={handleSubmit}>
-          <input
-            name="title"
-            placeholder="Event Title"
-            onChange={handleChange}
-            required
-          />
-          <input
-            name="location"
-            placeholder="Location"
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="datetime-local"
-            name="event_date"
-            onChange={handleChange}
-            required
-          />
-          <textarea
-            name="description"
-            placeholder="Description"
-            onChange={handleChange}
-            required
-          />
+          <input name="title" placeholder="Event Title" onChange={handleChange} required />
+          <input name="location" placeholder="Location" onChange={handleChange} required />
+          <input type="datetime-local" name="event_date" onChange={handleChange} required />
+          <textarea name="description" placeholder="Event Description" onChange={handleChange} required />
+
+          <h3>Speaker</h3>
+          <input name="speaker_name" placeholder="Speaker Name" onChange={handleChange} />
+          <textarea name="speaker_bio" placeholder="Speaker Bio" onChange={handleChange} />
+          <input name="speaker_designation" placeholder="Speaker Designation" onChange={handleChange} />
+
+          <h3>Schedule</h3>
+          <input name="schedule_time" placeholder="Time (e.g. 10:00 AM)" onChange={handleChange} />
+          <input name="schedule_title" placeholder="Session Title" onChange={handleChange} />
 
           <button type="submit">Create Event</button>
         </form>

@@ -3,18 +3,74 @@ import { NextResponse } from "next/server";
 export async function POST(req) {
   const body = await req.json();
 
-  const title = body.title;
-  const location = body.location;
-  const event_date = body.event_date;
-  const description = body.description;
-
-  const slug = title
+  const slug = body.title
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/(^-|-$)/g, "");
 
-  // Create entry
-  const response = await fetch(
+  /* ----------------------------
+     1️⃣ Create Speaker entry
+  -----------------------------*/
+  let speakerUid = null;
+
+  if (body.speaker_name) {
+    const speakerRes = await fetch(
+      "https://api.contentstack.io/v3/content_types/speaker_ayush/entries",
+      {
+        method: "POST",
+        headers: {
+          api_key: process.env.CONTENTSTACK_API_KEY,
+          authorization: process.env.CONTENTSTACK_MANAGEMENT_TOKEN,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          entry: {
+            name: body.speaker_name,
+            bio: body.speaker_bio,
+            designation: body.speaker_designation,
+          },
+          locale: "en-us",
+        }),
+      }
+    );
+
+    const speakerData = await speakerRes.json();
+    speakerUid = speakerData.entry.uid;
+  }
+
+  /* ----------------------------
+     2️⃣ Create Schedule entry
+  -----------------------------*/
+  let scheduleUid = null;
+
+  if (body.schedule_title) {
+    const scheduleRes = await fetch(
+      "https://api.contentstack.io/v3/content_types/schedule_ayush/entries",
+      {
+        method: "POST",
+        headers: {
+          api_key: process.env.CONTENTSTACK_API_KEY,
+          authorization: process.env.CONTENTSTACK_MANAGEMENT_TOKEN,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          entry: {
+            time: body.schedule_time,
+            title: body.schedule_title,
+          },
+          locale: "en-us",
+        }),
+      }
+    );
+
+    const scheduleData = await scheduleRes.json();
+    scheduleUid = scheduleData.entry.uid;
+  }
+
+  /* ----------------------------
+     3️⃣ Create Event entry
+  -----------------------------*/
+  const eventRes = await fetch(
     "https://api.contentstack.io/v3/content_types/event_ayush/entries",
     {
       method: "POST",
@@ -25,46 +81,30 @@ export async function POST(req) {
       },
       body: JSON.stringify({
         entry: {
-          title,
+          title: body.title,
           slug,
-          location,
-          event_date,
-          description,
+          location: body.location,
+          event_date: body.event_date,
+          description: body.description,
+          speakers: speakerUid ? [{ uid: speakerUid }] : [],
+          schedule: scheduleUid ? [{ uid: scheduleUid }] : [],
         },
         locale: "en-us",
       }),
     }
   );
 
-  const data = await response.json();
-  console.log("Create Entry Response:", data);
+  const eventData = await eventRes.json();
 
-  // Safety check
-  if (!data.entry || !data.entry.uid) {
+  if (!eventData.entry) {
     return NextResponse.json(
-      { error: "Entry creation failed", details: data },
+      { error: "Event creation failed", details: eventData },
       { status: 400 }
     );
   }
 
-  // Publish entry
-  await fetch(
-    `https://api.contentstack.io/v3/content_types/event_ayush/entries/${data.entry.uid}/publish`,
-    {
-      method: "POST",
-      headers: {
-        api_key: process.env.CONTENTSTACK_API_KEY,
-        authorization: process.env.CONTENTSTACK_MANAGEMENT_TOKEN,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        publish_details: {
-          environments: ["development"], // must match your env
-          locale: "en-us",
-        },
-      }),
-    }
-  );
-
-  return NextResponse.json({ success: true, entry: data.entry });
+  return NextResponse.json({
+    success: true,
+    event: eventData.entry,
+  });
 }
