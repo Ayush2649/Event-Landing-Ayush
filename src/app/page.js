@@ -9,7 +9,7 @@ export default async function HomePage() {
   const Query = Stack.ContentType("event_ayush").Query();
 
   Query.containedIn("slug", [
-    "party",
+    "pongal",
     "contentstack-event-ayush",
     "flowfest-2026-ayush",
   ]);

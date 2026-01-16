@@ -212,3 +212,38 @@
 .secondaryBtn:hover {
   background: rgba(255, 255, 255, 0.15);
 }
+
+.badge {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.upcoming {
+  background: #e0f2ff;
+  color: #0369a1;
+}
+
+.live {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.ended {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.liveText {
+  margin-top: 8px;
+  color: #b91c1c;
+  font-weight: 600;
+}
+
+.endedText {
+  margin-top: 8px;
+  color: #6b7280;
+}

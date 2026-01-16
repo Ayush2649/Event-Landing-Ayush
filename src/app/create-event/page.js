@@ -7,17 +7,46 @@ export default function CreateEvent() {
   const [form, setForm] = useState({
     title: "",
     location: "",
-    event_date: "",
+    start_time: "",
+    end_time: "",
     description: "",
-    speaker_name: "",
-    speaker_bio: "",
-    schedule_time: "",
-    schedule_title: "",
+    speakers: "",
+    schedules: "",
+    cta_text: "",
+    cta_link: "",
   });
 
-  function handleChange(e) {
+  const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
-  }
+  };
+
+  // Speakers
+  const handleSpeakerChange = (index, field, value) => {
+    const updated = [...form.speakers];
+    updated[index][field] = value;
+    setForm({ ...form, speakers: updated });
+  };
+
+  const addSpeaker = () => {
+    setForm({
+      ...form,
+      speakers: [...form.speakers, { title: "", designation: "", bio: "" }],
+    });
+  };
+
+  // Schedules
+  const handleScheduleChange = (index, field, value) => {
+    const updated = [...form.schedules];
+    updated[index][field] = value;
+    setForm({ ...form, schedules: updated });
+  };
+
+  const addSchedule = () => {
+    setForm({
+      ...form,
+      schedules: [...form.schedules, { time: "", title: "", description: "" }],
+    });
+  };
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -41,19 +70,85 @@ export default function CreateEvent() {
         <h1>Create Event</h1>
 
         <form onSubmit={handleSubmit}>
-          <input name="title" placeholder="Event Title" onChange={handleChange} required />
-          <input name="location" placeholder="Location" onChange={handleChange} required />
-          <input type="datetime-local" name="event_date" onChange={handleChange} required />
-          <textarea name="description" placeholder="Event Description" onChange={handleChange} required />
+          <input
+            name="title"
+            placeholder="Event Title"
+            onChange={handleChange}
+            required
+          />
+          <input
+            name="location"
+            placeholder="Location"
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="datetime-local"
+            name="start_time"
+            value={form.start_time}
+            onChange={handleChange}
+            required
+          />
+
+          <input
+            type="datetime-local"
+            name="end_time"
+            value={form.end_time}
+            onChange={handleChange}
+            required
+          />
+
+          <textarea
+            name="description"
+            placeholder="Event Description"
+            onChange={handleChange}
+            required
+          />
 
           <h3>Speaker</h3>
-          <input name="speaker_name" placeholder="Speaker Name" onChange={handleChange} />
-          <textarea name="speaker_bio" placeholder="Speaker Bio" onChange={handleChange} />
-          <input name="speaker_designation" placeholder="Speaker Designation" onChange={handleChange} />
+          <input
+            name="speaker_name"
+            placeholder="Speaker Name"
+            onChange={handleChange}
+          />
+          <textarea
+            name="speaker_bio"
+            placeholder="Speaker Bio"
+            onChange={handleChange}
+          />
+          <input
+            name="speaker_designation"
+            placeholder="Speaker Designation"
+            onChange={handleChange}
+          />
 
           <h3>Schedule</h3>
-          <input name="schedule_time" placeholder="Time (e.g. 10:00 AM)" onChange={handleChange} />
-          <input name="schedule_title" placeholder="Session Title" onChange={handleChange} />
+          <input
+            name="schedule_time"
+            placeholder="Time (e.g. 10:00 AM)"
+            onChange={handleChange}
+          />
+          <input
+            name="schedule_title"
+            placeholder="Session Title"
+            onChange={handleChange}
+          />
+
+          <h3>Call To Action</h3>
+
+          <input
+            name="cta_text"
+            placeholder="CTA Text (e.g. Register Now)"
+            value={form.cta_text}
+            onChange={handleChange}
+          />
+
+          <input
+            name="cta_link"
+            placeholder="CTA Link (e.g. https://register.com)"
+            value={form.cta_link}
+            onChange={handleChange}
+          />
 
           <button type="submit">Create Event</button>
         </form>

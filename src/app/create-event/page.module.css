@@ -48,3 +48,19 @@
 .card button:hover {
   background-color: #0284c7;
 }
+
+.group {
+  background: #f9fafb;
+  padding: 16px;
+  border-radius: 12px;
+  margin-bottom: 16px;
+}
+
+.addBtn {
+  margin: 8px 0 24px;
+  background: transparent;
+  color: #0284c7;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+}

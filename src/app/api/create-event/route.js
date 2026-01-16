@@ -25,7 +25,7 @@ export async function POST(req) {
         },
         body: JSON.stringify({
           entry: {
-            name: body.speaker_name,
+            title: body.speaker_name,
             bio: body.speaker_bio,
             designation: body.speaker_designation,
           },
@@ -35,7 +35,9 @@ export async function POST(req) {
     );
 
     const speakerData = await speakerRes.json();
-    speakerUid = speakerData.entry.uid;
+    if (speakerData?.entry?.uid) {
+      speakerUid = speakerData.entry.uid;
+    }
   }
 
   /* ----------------------------
@@ -64,7 +66,20 @@ export async function POST(req) {
     );
 
     const scheduleData = await scheduleRes.json();
-    scheduleUid = scheduleData.entry.uid;
+    if (scheduleData?.entry?.uid) {
+      scheduleUid = scheduleData.entry.uid;
+    }
+  }
+
+  const landingSections = [];
+
+  if (body.cta_text && body.cta_link) {
+    landingSections.push({
+      cta_section: {
+        cta_text: body.cta_text,
+        cta_link: body.cta_link,
+      },
+    });
   }
 
   /* ----------------------------
@@ -88,6 +103,7 @@ export async function POST(req) {
           description: body.description,
           speakers: speakerUid ? [{ uid: speakerUid }] : [],
           schedule: scheduleUid ? [{ uid: scheduleUid }] : [],
+          landing_sections: landingSections,
         },
         locale: "en-us",
       }),
