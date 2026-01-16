@@ -1,55 +1,214 @@
-.page {
-  background-color: #f3f8fc;
-  min-height: 100vh;
-  padding-bottom: 4rem;
-}
-
-.banner {
+/* HERO */
+.hero {
+  position: relative;
   width: 100%;
-  height: 400px;
-  object-fit: cover;
+  height: 60vh;              /* 👈 this is the key */
+  min-height: 420px;
+  background-size: cover;   /* stretch nicely */
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
-/* Event header */
-.header {
-  max-width: 900px;
-  margin: 2rem auto 1rem;
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.35),
+    rgba(0, 0, 0, 0.65)
+  );
 }
 
-.header h1 {
-  font-size: 2.6rem;
-  color: #1f2937;
+.heroInner {
+  position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  height: 100%;
+
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: 3rem;
+}
+
+.heroInner h1 {
+  color: #fff;
+  font-size: 3rem;
+  font-weight: 700;
+}
+
+/* MAIN CONTENT */
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem;
 }
 
 .meta {
-  color: #6b7280;
-  margin-top: 0.5rem;
-}
-
-/* Description */
-.description {
-  max-width: 900px;
-  margin: 2rem auto;
-  font-size: 1.05rem;
-  line-height: 1.7;
-}
-
-/* Sections (Speakers, Schedule) */
-.section {
-  max-width: 900px;
-  margin: 3rem auto;
-}
-
-.sectionTitle {
-  font-size: 1.6rem;
+  color: #555;
   margin-bottom: 1.5rem;
-  color: #1f2937;
+  font-size: 0.95rem;
+}
+
+/* DESCRIPTION */
+.description {
+  line-height: 1.7;
+  color: #333;
+}
+
+.description p {
+  margin-bottom: 1rem;
+}
+
+/* SECTIONS */
+.section {
+  margin-top: 4rem;
+}
+
+.section h2 {
+  margin-bottom: 1.5rem;
+}
+
+/* SPEAKERS GRID */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
 }
 
 .card {
   background: white;
-  padding: 1.2rem;
+  padding: 1.5rem;
   border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+}
+
+.card h3 {
+  margin-bottom: 0.5rem;
+}
+
+.section {
+  max-width: 1100px;
+  margin: 4rem auto;
+  padding: 0 2rem;
+}
+
+.sectionTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+}
+
+.scheduleList {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.scheduleItem {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 1.5rem;
+
+  background: #ffffff;
+  padding: 1.25rem 1.5rem;
+  border-radius: 14px;
+
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+}
+
+.timeCol {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #2563eb; /* calmer blue */
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.contentCol h4 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin: 0 0 0.4rem;
+  color: #111827;
+}
+
+.contentCol p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #4b5563;
+  line-height: 1.5;
+}
+
+.speakerImage {
+  width: 96px;
+  height: 96px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-bottom: 12px;
+}
+
+/* CTA SECTION */
+.cta {
+  margin-top: 4rem;
+  padding: 4rem 1.5rem;
+  background: linear-gradient(
+    135deg,
+    #0ea5e9,
+    #0284c7
+  );
+  color: white;
+}
+
+.ctaContent {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.ctaContent h2 {
+  font-size: 2rem;
+  font-weight: 700;
   margin-bottom: 1rem;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+}
+
+.ctaContent p {
+  font-size: 1.1rem;
+  opacity: 0.95;
+  margin-bottom: 2rem;
+}
+
+.ctaActions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.primaryBtn {
+  background: white;
+  color: #0284c7;
+  padding: 0.8rem 1.6rem;
+  border-radius: 999px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.primaryBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.secondaryBtn {
+  border: 2px solid white;
+  color: white;
+  padding: 0.8rem 1.6rem;
+  border-radius: 999px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+
+.secondaryBtn:hover {
+  background: rgba(255, 255, 255, 0.15);
 }

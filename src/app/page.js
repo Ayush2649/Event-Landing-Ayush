@@ -19,6 +19,10 @@ export default async function HomePage() {
   const result = await Query.find();
   const events = result[0] || [];
 
+  function stripHtml(html = "") {
+    return html.replace(/<[^>]*>?/gm, "").replace(/&nbsp;/g, " ");
+  }
+
   return (
     <main className={styles.page}>
       {/* ================= HERO SECTION ================= */}
@@ -60,8 +64,8 @@ export default async function HomePage() {
 
               <div className={styles.eventContent}>
                 <h3>{event.title}</h3>
-                <p>
-                  {event.description ||
+                <p className={styles.eventDesc}>
+                  {stripHtml(event.description) ||
                     "A professionally managed event powered by Contentstack."}
                 </p>
               </div>

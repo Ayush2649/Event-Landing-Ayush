@@ -80,6 +80,12 @@
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  text-decoration: none;
+  color: inherit;
+}
+
+.eventCard:hover {
+  text-decoration: none;
 }
 
 .eventImage {
@@ -99,6 +105,18 @@
 .eventContent p {
   color: #555;
 }
+
+.eventDesc {
+  font-size: 0.95rem;
+  color: #555;
+  line-height: 1.5;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 3;   /* 👈 show only 3 lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
 
 /* FOOTER */
 .footer {

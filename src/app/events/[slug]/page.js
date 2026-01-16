@@ -1,8 +1,9 @@
 import Stack from "../../lib/contentstack";
 import styles from "./page.module.css";
+import Header from "@/components/Header/Header";
 
 export default async function EventDetail({ params }) {
-  const { slug } = await params; // ✅ FIX
+  const { slug } = await params;
 
   const Query = Stack.ContentType("event_ayush").Query();
   Query.where("slug", slug);
@@ -12,55 +13,106 @@ export default async function EventDetail({ params }) {
   const result = await Query.find();
   const event = result[0][0];
 
+  const ctaBlock = event.landing_sections?.find((block) => block.cta_section);
+
   if (!event) {
-    return <p>Event not found</p>;
+    return <div className={styles.notFound}>Event not found</div>;
   }
 
   return (
-    <main className={styles.page}>
-      {event.banner_image?.url && (
-        <img
-          src={event.banner_image.url}
-          alt={event.title}
-          className={styles.banner}
-        />
-      )}
+    <>
+      <Header />
 
-      <div className={styles.header}>
-        <h1>{event.title}</h1>
+      {/* HERO BANNER */}
+      <section
+        className={styles.hero}
+        style={{
+          backgroundImage: `url(${event.banner_image?.url})`,
+        }}
+      >
+        <div className={styles.heroOverlay} />
+
+        <div className={styles.heroInner}>
+          <h1>{event.title}</h1>
+        </div>
+      </section>
+
+      {/* CONTENT */}
+      <main className={styles.container}>
         <p className={styles.meta}>
-          📍 {event.location} | 🗓 {event.event_date}
+          📍 {event.location} · 📅{" "}
+          {new Date(event.event_date).toLocaleDateString()}
         </p>
-      </div>
 
-      <p className={styles.description}>{event.description}</p>
+        <div
+          className={styles.description}
+          dangerouslySetInnerHTML={{ __html: event.description }}
+        />
 
-      {/* Speakers */}
-      {event.speakers?.length > 0 && (
-        <section className={styles.section}>
-          <h2 className={styles.sectionTitle}>Speakers</h2>
-          {event.speakers.map((speaker) => (
-            <div key={speaker.uid} className={styles.card}>
-              <h4>{speaker.title}</h4>
-              <p>{speaker.designation}</p>
-              <p>{speaker.bio}</p>
+        {/* SPEAKERS */}
+        {event.speakers?.length > 0 && (
+          <section className={styles.section}>
+            <h2>Speakers</h2>
+            <div className={styles.grid}>
+              {event.speakers.map((speaker) => (
+                <div key={speaker.uid} className={styles.card}>
+                  {speaker.photo?.url && (
+                    <img
+                      src={speaker.photo.url}
+                      alt={speaker.title}
+                      className={styles.speakerImage}
+                    />
+                  )}
+                  <h3>{speaker.title}</h3>
+                  <p>{speaker.designation}</p>
+                </div>
+              ))}
             </div>
-          ))}
-        </section>
-      )}
+          </section>
+        )}
 
-      {/* Schedule */}
-      {event.schedule?.length > 0 && (
-        <section className={styles.section}>
-          <h2 className={styles.sectionTitle}>Schedule</h2>
-          {event.schedule.map((item) => (
-            <div key={item.uid} className={styles.card}>
-              <strong>{item.time}</strong>
-              <p>{item.title}</p>
+        {/* SCHEDULE */}
+        {event.schedule?.length > 0 && (
+          <section className={styles.section}>
+            <h2 className={styles.sectionTitle}>Schedule</h2>
+
+            <div className={styles.scheduleList}>
+              {event.schedule.map((item) => (
+                <div key={item.uid} className={styles.scheduleItem}>
+                  <div className={styles.timeCol}>{item.time}</div>
+
+                  <div className={styles.contentCol}>
+                    <h4>{item.title}</h4>
+                    {item.description && <p>{item.description}</p>}
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
-        </section>
-      )}
-    </main>
+          </section>
+        )}
+
+        {/* CTA SECTION */}
+        {ctaBlock && (
+          <section className={styles.cta}>
+            <div className={styles.ctaContent}>
+              <h2>{ctaBlock.cta_section.cta_text}</h2>
+
+              {ctaBlock.cta_section.cta_description && (
+                <p>{ctaBlock.cta_section.cta_description}</p>
+              )}
+
+              <div className={styles.ctaActions}>
+                <a
+                  href={ctaBlock.cta_section.cta_link}
+                  className={styles.primaryBtn}
+                >
+                  {ctaBlock.cta_section.cta_button_text || "Register Now"}
+                </a>
+              </div>
+            </div>
+          </section>
+        )}
+      </main>
+    </>
   );
 }
