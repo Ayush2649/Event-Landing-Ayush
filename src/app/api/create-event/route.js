@@ -31,7 +31,7 @@ export async function POST(req) {
           },
           locale: "en-us",
         }),
-      }
+      },
     );
 
     const speakerData = await speakerRes.json();
@@ -62,7 +62,7 @@ export async function POST(req) {
           },
           locale: "en-us",
         }),
-      }
+      },
     );
 
     const scheduleData = await scheduleRes.json();
@@ -99,7 +99,8 @@ export async function POST(req) {
           title: body.title,
           slug,
           location: body.location,
-          event_date: body.event_date,
+          start_time: body.start_time,
+          end_time: body.end_time,
           description: body.description,
           speakers: speakerUid ? [{ uid: speakerUid }] : [],
           schedule: scheduleUid ? [{ uid: scheduleUid }] : [],
@@ -107,7 +108,7 @@ export async function POST(req) {
         },
         locale: "en-us",
       }),
-    }
+    },
   );
 
   const eventData = await eventRes.json();
@@ -115,7 +116,7 @@ export async function POST(req) {
   if (!eventData.entry) {
     return NextResponse.json(
       { error: "Event creation failed", details: eventData },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -124,3 +125,5 @@ export async function POST(req) {
     event: eventData.entry,
   });
 }
+
+export const runtime = "nodejs";

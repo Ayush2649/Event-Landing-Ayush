@@ -41,7 +41,7 @@ export default async function EventDetail({ params }) {
       <main className={styles.container}>
         <p className={styles.meta}>
           📍 {event.location} · 📅{" "}
-          {new Date(event.event_date).toLocaleDateString()}
+          {new Date(event.start_time).toLocaleDateString()}
         </p>
 
         <div

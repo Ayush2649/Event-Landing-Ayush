@@ -64,6 +64,9 @@ export default function CreateEvent() {
     }
   }
 
+  console.log("START:", form.start_time);
+  console.log("END:", form.end_time);
+
   return (
     <main className={styles.page}>
       <div className={styles.card}>
