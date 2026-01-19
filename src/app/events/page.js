@@ -2,6 +2,7 @@ import Stack from "../lib/contentstack";
 import styles from "./page.module.css";
 import CountdownTimer from "@/components/Header/CountDownTimer";
 import { getEventStatus } from "@/utils/eventStatus";
+import { sortEventsByTime } from "@/utils/sortEvents";
 import Link from "next/link";
 
 export default async function EventsPage() {
@@ -10,7 +11,9 @@ export default async function EventsPage() {
   Query.toJSON();
 
   const result = await Query.find();
-  const events = result[0];
+  let events = result[0] || [];
+
+  events = sortEventsByTime(events);
 
   return (
     <main className={styles.page}>
