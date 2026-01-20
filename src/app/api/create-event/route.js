@@ -61,7 +61,10 @@ async function publishEntry(contentTypeUid, entryUid) {
   if (!entryUid) return;
 
   const env =
-    process.env.CONTENTSTACK_PUBLISH_ENVIRONMENT || "development";
+    process.env.CONTENTSTACK_ENVIRONMENT || "development";
+  const shouldPublish =
+    (process.env.CONTENTSTACK_AUTO_PUBLISH || "true").toLowerCase() === "true";
+  if (!shouldPublish) return;
 
   const res = await fetch(
     `https://api.contentstack.io/v3/content_types/${contentTypeUid}/entries/${entryUid}/publish`,
@@ -73,8 +76,10 @@ async function publishEntry(contentTypeUid, entryUid) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        locale: "en-us",
-        environments: [env],
+        entry: {
+          locales: ["en-us"],
+          environments: [env],
+        },
       }),
     },
   );
@@ -156,8 +161,16 @@ export async function POST(req) {
         });
 
         if (speakerEntry?.uid) {
-          // Auto-publish in non-production (or when env var is set)
-          await publishEntry("speaker_ayush", speakerEntry.uid);
+          // Auto-publish as soon as it's created (best-effort)
+          try {
+            await publishEntry("speaker_ayush", speakerEntry.uid);
+          } catch (pubErr) {
+            console.error(
+              "Speaker publish failed:",
+              pubErr?.message,
+              pubErr?.details,
+            );
+          }
           speakers.push({ uid: speakerEntry.uid });
         }
       } catch (e) {
@@ -196,7 +209,15 @@ export async function POST(req) {
           description: schedDesc,
         });
         if (scheduleEntry?.uid) {
-          await publishEntry("schedule_ayush", scheduleEntry.uid);
+          try {
+            await publishEntry("schedule_ayush", scheduleEntry.uid);
+          } catch (pubErr) {
+            console.error(
+              "Schedule publish failed:",
+              pubErr?.message,
+              pubErr?.details,
+            );
+          }
           schedule.push({ uid: scheduleEntry.uid });
         }
       } catch (e) {
@@ -276,13 +297,11 @@ export async function POST(req) {
       );
     }
 
-    // Auto-publish event in non-production
-    if (process.env.NODE_ENV !== "production") {
-      try {
-        await publishEntry("event_ayush", eventData.entry.uid);
-      } catch (pubErr) {
-        console.error("Event publish skipped:", pubErr?.message, pubErr?.details);
-      }
+    // Auto-publish event as soon as it's created (best-effort)
+    try {
+      await publishEntry("event_ayush", eventData.entry.uid);
+    } catch (pubErr) {
+      console.error("Event publish failed:", pubErr?.message, pubErr?.details);
     }
 
     return NextResponse.json(

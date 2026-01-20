@@ -230,3 +230,28 @@
   margin-bottom: 2rem;
 }
 
+.featureCard {
+  background: #fff;
+  border-radius: 16px;
+  padding: 2rem;
+  text-align: left;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.featureCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 45px rgba(0,0,0,0.08);
+}
+
+.iconWrapper {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  margin-bottom: 1rem;
+}

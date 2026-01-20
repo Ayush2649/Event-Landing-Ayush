@@ -23,6 +23,49 @@ export default async function HomePage() {
     return html.replace(/<[^>]*>?/gm, "").replace(/&nbsp;/g, " ");
   }
 
+  const LayersIcon = () => (
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+      <path
+        d="M12 2L2 7l10 5 10-5-10-5Z"
+        stroke="currentColor"
+        strokeWidth="2"
+      />
+      <path d="M2 12l10 5 10-5" stroke="currentColor" strokeWidth="2" />
+      <path d="M2 17l10 5 10-5" stroke="currentColor" strokeWidth="2" />
+    </svg>
+  );
+
+  const ZapIcon = () => (
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+      <path
+        d="M13 2L3 14h7l-1 8 10-12h-7l1-8Z"
+        stroke="currentColor"
+        strokeWidth="2"
+      />
+    </svg>
+  );
+
+  const EyeIcon = () => (
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+      <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="2" />
+      <path
+        d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7-10-7-10-7Z"
+        stroke="currentColor"
+        strokeWidth="2"
+      />
+    </svg>
+  );
+
+  const RocketIcon = () => (
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+      <path
+        d="M5 19l4-4M15 9l4-4M9 15l6-6"
+        stroke="currentColor"
+        strokeWidth="2"
+      />
+    </svg>
+  );
+
   return (
     <main className={styles.page}>
       {/* HERO */}
@@ -53,21 +96,33 @@ export default async function HomePage() {
 
         <div className={styles.featureGrid}>
           <div className={styles.featureCard}>
+            <div className={styles.iconWrapper}>
+              <LayersIcon />
+            </div>
             <h3>Structured Content</h3>
             <p>All event data is modeled and managed using Contentstack CMS.</p>
           </div>
 
           <div className={styles.featureCard}>
+            <div className={styles.iconWrapper}>
+              <ZapIcon />
+            </div>
             <h3>Powerful Automation</h3>
             <p>Auto-publish events, trigger emails, and manage workflows.</p>
           </div>
 
           <div className={styles.featureCard}>
+            <div className={styles.iconWrapper}>
+              <EyeIcon />
+            </div>
             <h3>Live Preview</h3>
             <p>Preview event pages instantly before publishing.</p>
           </div>
 
           <div className={styles.featureCard}>
+            <div className={styles.iconWrapper}>
+              <RocketIcon />
+            </div>
             <h3>Instant Launch</h3>
             <p>Deploy event pages quickly using Contentstack Launch.</p>
           </div>

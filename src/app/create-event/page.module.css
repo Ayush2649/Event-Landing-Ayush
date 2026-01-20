@@ -9,6 +9,7 @@
 /* MAIN CARD */
 .card {
   max-width: 760px;
+  margin-top: 2rem;
   margin: auto;
   background: #ffffff;
   padding: 3rem;
