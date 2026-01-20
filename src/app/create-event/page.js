@@ -2,70 +2,135 @@
 
 import { useState } from "react";
 import styles from "./page.module.css";
+import { useRouter } from "next/navigation";
 
 export default function CreateEvent() {
-  const [form, setForm] = useState({
-    title: "",
-    location: "",
-    start_time: "",
-    end_time: "",
-    description: "",
-    speakers: "",
-    schedules: "",
-    cta_text: "",
-    cta_link: "",
-  });
+  const router = useRouter();
+  const [title, setTitle] = useState("");
+  const [location, setLocation] = useState("");
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
+  const [description, setDescription] = useState("");
+  const [ctaText, setCtaText] = useState("");
+  const [ctaLink, setCtaLink] = useState("");
+  const [bannerImage, setBannerImage] = useState(null);
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+  const [speakers, setSpeakers] = useState([
+    { name: "", designation: "", bio: "", photo: null },
+  ]);
 
-  // Speakers
-  const handleSpeakerChange = (index, field, value) => {
-    const updated = [...form.speakers];
-    updated[index][field] = value;
-    setForm({ ...form, speakers: updated });
-  };
+  const [schedules, setSchedules] = useState([
+    { time: "", title: "", description: "" },
+  ]);
 
+  /* ----------------------------
+     SPEAKERS
+  -----------------------------*/
   const addSpeaker = () => {
-    setForm({
-      ...form,
-      speakers: [...form.speakers, { title: "", designation: "", bio: "" }],
-    });
+    setSpeakers([
+      ...speakers,
+      { name: "", designation: "", bio: "", photo: null },
+    ]);
   };
 
-  // Schedules
-  const handleScheduleChange = (index, field, value) => {
-    const updated = [...form.schedules];
+  const updateSpeaker = (index, field, value) => {
+    const updated = [...speakers];
     updated[index][field] = value;
-    setForm({ ...form, schedules: updated });
+    setSpeakers(updated);
   };
 
+  /* ----------------------------
+     SCHEDULES
+  -----------------------------*/
   const addSchedule = () => {
-    setForm({
-      ...form,
-      schedules: [...form.schedules, { time: "", title: "", description: "" }],
-    });
+    setSchedules([...schedules, { time: "", title: "", description: "" }]);
   };
 
+  const updateSchedule = (index, field, value) => {
+    const updated = [...schedules];
+    updated[index][field] = value;
+    setSchedules(updated);
+  };
+
+  /* ----------------------------
+     SUBMIT
+  -----------------------------*/
   async function handleSubmit(e) {
     e.preventDefault();
 
-    const res = await fetch("/api/create-event", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
+    const formData = new FormData();
+
+    formData.append("title", title);
+    formData.append("location", location);
+    formData.append("start_time", startTime);
+    formData.append("end_time", endTime);
+    formData.append("description", description);
+    formData.append("cta_text", ctaText);
+    formData.append("cta_link", ctaLink);
+
+    if (bannerImage) {
+      formData.append("banner_image", bannerImage);
+    }
+
+    speakers.forEach((speaker, index) => {
+      formData.append(`speaker_name_${index}`, speaker.name);
+      formData.append(`speaker_designation_${index}`, speaker.designation);
+      formData.append(`speaker_bio_${index}`, speaker.bio);
+
+      if (speaker.photo) {
+        formData.append(`speaker_photo_${index}`, speaker.photo);
+      }
     });
 
-    if (res.ok) {
-      alert("Event created with speakers & schedule!");
-    } else {
-      alert("Failed to create event");
-    }
-  }
+    schedules.forEach((schedule, index) => {
+      formData.append(`schedule_time_${index}`, schedule.time);
+      formData.append(`schedule_title_${index}`, schedule.title);
+      formData.append(`schedule_description_${index}`, schedule.description);
+    });
 
-  console.log("START:", form.start_time);
-  console.log("END:", form.end_time);
+    const res = await fetch("/api/create-event", {
+      method: "POST",
+      body: formData,
+    });
+
+    let data = null;
+
+    try {
+      data = await res.json();
+    } catch (err) {
+      console.error("Invalid JSON response", err);
+    }
+
+    if (!res.ok) {
+      const detailsText = data?.details
+        ? JSON.stringify(data.details, null, 2)
+        : "";
+      const msg = [
+        data?.message || data?.error || "Event creation failed ❌",
+        detailsText ? `\n\nDetails:\n${detailsText}` : "",
+      ].join("");
+      alert(msg);
+      console.error(data);
+      return;
+    }
+
+    alert("Event created successfully ✅");
+    if (data?.event?.slug) {
+      router.push(`/events/${data.event.slug}`);
+      router.refresh();
+    }
+
+    setTitle("");
+    setLocation("");
+    setStartTime("");
+    setEndTime("");
+    setDescription("");
+    setCtaText("");
+    setCtaLink("");
+    setBannerImage(null);
+    setSpeakers([{ name: "", designation: "", bio: "", photo: null }]);
+    setSchedules([{ time: "", title: "", description: "" }]);
+  }
 
   return (
     <main className={styles.page}>
@@ -74,83 +139,116 @@ export default function CreateEvent() {
 
         <form onSubmit={handleSubmit}>
           <input
-            name="title"
             placeholder="Event Title"
-            onChange={handleChange}
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
             required
           />
+
           <input
-            name="location"
             placeholder="Location"
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="datetime-local"
-            name="start_time"
-            value={form.start_time}
-            onChange={handleChange}
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
             required
           />
 
           <input
             type="datetime-local"
-            name="end_time"
-            value={form.end_time}
-            onChange={handleChange}
+            value={startTime}
+            onChange={(e) => setStartTime(e.target.value)}
+            required
+          />
+
+          <input
+            type="datetime-local"
+            value={endTime}
+            onChange={(e) => setEndTime(e.target.value)}
             required
           />
 
           <textarea
-            name="description"
             placeholder="Event Description"
-            onChange={handleChange}
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
             required
           />
 
-          <h3>Speaker</h3>
+          <h3>Banner Image</h3>
           <input
-            name="speaker_name"
-            placeholder="Speaker Name"
-            onChange={handleChange}
+            type="file"
+            accept="image/*"
+            onChange={(e) => setBannerImage(e.target.files[0])}
           />
-          <textarea
-            name="speaker_bio"
-            placeholder="Speaker Bio"
-            onChange={handleChange}
-          />
-          <input
-            name="speaker_designation"
-            placeholder="Speaker Designation"
-            onChange={handleChange}
-          />
+
+          <h3>Speakers</h3>
+          {speakers.map((speaker, index) => (
+            <div key={index} className={styles.block}>
+              <input
+                placeholder="Name"
+                value={speaker.name}
+                onChange={(e) => updateSpeaker(index, "name", e.target.value)}
+              />
+              <input
+                placeholder="Designation"
+                value={speaker.designation}
+                onChange={(e) =>
+                  updateSpeaker(index, "designation", e.target.value)
+                }
+              />
+              <textarea
+                placeholder="Bio"
+                value={speaker.bio}
+                onChange={(e) => updateSpeaker(index, "bio", e.target.value)}
+              />
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) =>
+                  updateSpeaker(index, "photo", e.target.files[0])
+                }
+              />
+            </div>
+          ))}
+          <button type="button" onClick={addSpeaker}>
+            + Add Speaker
+          </button>
 
           <h3>Schedule</h3>
-          <input
-            name="schedule_time"
-            placeholder="Time (e.g. 10:00 AM)"
-            onChange={handleChange}
-          />
-          <input
-            name="schedule_title"
-            placeholder="Session Title"
-            onChange={handleChange}
-          />
+          {schedules.map((item, index) => (
+            <div key={index} className={styles.block}>
+              <input
+                placeholder="Time (e.g. 10:00 AM)"
+                value={item.time}
+                onChange={(e) => updateSchedule(index, "time", e.target.value)}
+              />
+              <input
+                placeholder="Title"
+                value={item.title}
+                onChange={(e) => updateSchedule(index, "title", e.target.value)}
+              />
+              <textarea
+                placeholder="Description"
+                value={item.description}
+                onChange={(e) =>
+                  updateSchedule(index, "description", e.target.value)
+                }
+              />
+            </div>
+          ))}
+          <button type="button" onClick={addSchedule}>
+            + Add Schedule
+          </button>
 
           <h3>Call To Action</h3>
-
           <input
-            name="cta_text"
-            placeholder="CTA Text (e.g. Register Now)"
-            value={form.cta_text}
-            onChange={handleChange}
+            placeholder="CTA Text"
+            value={ctaText}
+            onChange={(e) => setCtaText(e.target.value)}
           />
-
           <input
-            name="cta_link"
-            placeholder="CTA Link (e.g. https://register.com)"
-            value={form.cta_link}
-            onChange={handleChange}
+            placeholder="CTA Link"
+            value={ctaLink}
+            onChange={(e) => setCtaLink(e.target.value)}
           />
 
           <button type="submit">Create Event</button>

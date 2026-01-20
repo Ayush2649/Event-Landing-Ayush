@@ -6,7 +6,7 @@ export default function Header() {
     <header className={styles.header}>
       {/* LOGO */}
       <Link href="/" className={styles.logo}>
-        🎤 Eventify
+        <img src="/logo2.png" alt="Eventify Logo" />
       </Link>
 
       {/* NAV LINKS */}

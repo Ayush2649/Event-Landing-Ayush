@@ -1,66 +1,161 @@
+/* PAGE BACKGROUND */
 .page {
   min-height: 100vh;
-  background-color: #f3f8fc;
-  padding: 3rem 1rem;
+  background: linear-gradient(180deg, #f3f8fc 0%, #eef6fb 100%);
+  padding: 4rem 1rem;
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
+/* MAIN CARD */
 .card {
-  max-width: 720px;
-  margin: 2rem auto;
+  max-width: 760px;
+  margin: auto;
   background: #ffffff;
-  padding: 2.5rem;
-  border-radius: 14px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06);
+  padding: 3rem;
+  border-radius: 18px;
+  box-shadow:
+    0 10px 25px rgba(0, 0, 0, 0.05),
+    0 30px 60px rgba(0, 0, 0, 0.06);
 }
 
+/* TITLE */
 .card h1 {
-  margin-bottom: 1.8rem;
-  font-size: 1.8rem;
-  color: #1f2937;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 2rem;
+  text-align: center;
 }
 
+/* SECTION HEADERS */
+.card h3 {
+  margin: 2.2rem 0 1rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+/* INPUTS */
 .card input,
 .card textarea {
   width: 100%;
-  padding: 0.85rem 1rem;
-  margin-bottom: 1.2rem;
-  border-radius: 8px;
-  border: 1px solid #d1d5db;
+  padding: 0.9rem 1rem;
+  margin-bottom: 1.1rem;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
   font-size: 0.95rem;
+  color: #111827;
+  background: #f9fafb;
+  transition: all 0.2s ease;
 }
 
+/* PLACEHOLDERS */
+.card input::placeholder,
+.card textarea::placeholder {
+  color: #9ca3af;
+}
+
+/* FOCUS STATE */
+.card input:focus,
+.card textarea:focus {
+  outline: none;
+  background: #ffffff;
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.25);
+}
+
+/* TEXTAREA */
 .card textarea {
   min-height: 120px;
   resize: vertical;
 }
 
-.card button {
-  background-color: #0ea5e9;
-  color: white;
-  border: none;
-  padding: 0.9rem 1.6rem;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  font-weight: 600;
-  cursor: pointer;
+/* GROUP (Speaker / Schedule Block) */
+.block {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  padding: 1.5rem;
+  border-radius: 16px;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.04);
 }
 
-.card button:hover {
-  background-color: #0284c7;
-}
-
-.group {
-  background: #f9fafb;
-  padding: 16px;
-  border-radius: 12px;
-  margin-bottom: 16px;
-}
-
+/* ADD BUTTON */
 .addBtn {
-  margin: 8px 0 24px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0.5rem 0 2rem;
   background: transparent;
   color: #0284c7;
   font-weight: 600;
+  font-size: 0.95rem;
   border: none;
   cursor: pointer;
+}
+
+.addBtn:hover {
+  text-decoration: underline;
+}
+
+/* FILE INPUT */
+.card input[type="file"] {
+  background: transparent;
+  border: none;
+  padding-left: 0;
+}
+
+.card input,
+.card textarea {
+  width: 100%;
+  max-width: 100%;
+  display: block;
+}
+
+/* SUBMIT BUTTON */
+.card button[type="submit"] {
+  width: 100%;
+  margin-top: 1.5rem;
+  background: linear-gradient(135deg, #0ea5e9, #0284c7);
+  color: white;
+  border: none;
+  padding: 1rem;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.card button[type="submit"]:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 25px rgba(14, 165, 233, 0.35);
+}
+
+/* SMALL SCREENS */
+@media (max-width: 640px) {
+  .card {
+    padding: 2rem 1.5rem;
+  }
+}
+
+.fileUpload {
+  display: inline-block;
+  padding: 0.6rem 1.2rem;
+  background: #f1f5f9;
+  color: #0284c7;
+  font-weight: 600;
+  border-radius: 10px;
+  cursor: pointer;
+  border: 1px dashed #cbd5f5;
+  transition: all 0.2s ease;
+  margin-top: 0.5rem;
+}
+
+.fileUpload:hover {
+  background: #e0f2fe;
+}
+
+.addBtn:hover {
+  background: #bae6fd;
 }

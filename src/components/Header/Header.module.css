@@ -4,6 +4,7 @@
   left: 0;
   right: 0;              /* 👈 IMPORTANT */
   z-index: 20;
+  height: 72px;
 
   display: flex;
   align-items: center;
@@ -16,12 +17,22 @@
 
 /* LOGO */
 .logo {
-  font-size: 1.4rem;
-  font-weight: 700;
-  color: #1f2937;
-  cursor: pointer;
-  text-decoration: none;  /* 👈 ADDED FOR LINK */
+  display: flex;
+  align-items: center;
+  height: 150px;
 }
+
+.logo img {
+  height: 100%;
+  width: auto;
+  object-fit: contain;
+}
+
+.logo:hover {
+  color: #2563eb; /* subtle brand blue on hover */
+  transform: translateY(-1px);
+}
+
 
 /* NAV */
 .nav {

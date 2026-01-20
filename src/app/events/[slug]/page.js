@@ -11,13 +11,13 @@ export default async function EventDetail({ params }) {
   Query.toJSON();
 
   const result = await Query.find();
-  const event = result[0][0];
-
-  const ctaBlock = event.landing_sections?.find((block) => block.cta_section);
+  const event = result?.[0]?.[0];
 
   if (!event) {
     return <div className={styles.notFound}>Event not found</div>;
   }
+
+  const ctaBlock = event.landing_sections?.find((block) => block.cta_section);
 
   return (
     <>

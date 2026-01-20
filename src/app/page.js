@@ -9,7 +9,7 @@ export default async function HomePage() {
   const Query = Stack.ContentType("event_ayush").Query();
 
   Query.containedIn("slug", [
-    "pongal",
+    "mongodb-new-product-launch",
     "contentstack-event-ayush",
     "flowfest-2026-ayush",
   ]);
@@ -25,25 +25,56 @@ export default async function HomePage() {
 
   return (
     <main className={styles.page}>
-      {/* ================= HERO SECTION ================= */}
+      {/* HERO */}
       <section className={styles.hero}>
-        <div className={styles.heroOverlay}></div>
+        <div className={styles.heroOverlay} />
 
-        <div className={styles.heroContent}>
-          <h1>The Smart Event Management Platform</h1>
+        <div className={styles.heroInner}>
+          <div className={styles.heroText}>
+            <h1>The Smart Event Management Platform</h1>
+            <p>
+              Create, manage, automate, and publish events effortlessly using
+              Contentstack and Next.js.
+            </p>
 
-          <p>
-            Create, manage, automate, and publish events effortlessly using
-            Contentstack and Next.js.
-          </p>
+            <Link href="/create-event">
+              <button className={styles.primaryBtn}>Create Event</button>
+            </Link>
+          </div>
 
-          <Link href="/create-event">
-            <button className={styles.heroButton}>Get Started</button>
-          </Link>
+          <div className={styles.heroImage}>
+            <img src="/product-preview.png" alt="Eventify Dashboard" />
+          </div>
         </div>
       </section>
 
-      {/* ================= FEATURED EVENTS ================= */}
+      <section className={styles.features}>
+        <h2>Why Eventify?</h2>
+
+        <div className={styles.featureGrid}>
+          <div className={styles.featureCard}>
+            <h3>Structured Content</h3>
+            <p>All event data is modeled and managed using Contentstack CMS.</p>
+          </div>
+
+          <div className={styles.featureCard}>
+            <h3>Powerful Automation</h3>
+            <p>Auto-publish events, trigger emails, and manage workflows.</p>
+          </div>
+
+          <div className={styles.featureCard}>
+            <h3>Live Preview</h3>
+            <p>Preview event pages instantly before publishing.</p>
+          </div>
+
+          <div className={styles.featureCard}>
+            <h3>Instant Launch</h3>
+            <p>Deploy event pages quickly using Contentstack Launch.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* FEATURED EVENTS */}
       <section className={styles.featured}>
         <h2>Featured Events</h2>
 
@@ -61,11 +92,10 @@ export default async function HomePage() {
                   className={styles.eventImage}
                 />
               )}
-
               <div className={styles.eventContent}>
                 <h3>{event.title}</h3>
-                <p className={styles.eventDesc}>
-                  {stripHtml(event.description) ||
+                <p>
+                  {event.short_description ||
                     "A professionally managed event powered by Contentstack."}
                 </p>
               </div>
@@ -74,7 +104,15 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ================= FOOTER ================= */}
+      <section className={styles.ctaBlock}>
+        <h2>Ready to build your next event?</h2>
+        {/* <p>Create and manage professional events in minutes.</p> */}
+
+        <Link href="/create-event">
+          <button className={styles.primaryBtn}>Get Started</button>
+        </Link>
+      </section>
+
       <footer className={styles.footer}>
         © 2026 Eventify · Powered by Contentstack · Built with Next.js
       </footer>
