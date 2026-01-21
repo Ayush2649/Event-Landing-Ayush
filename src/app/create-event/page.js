@@ -14,9 +14,10 @@ export default function CreateEvent() {
   const [ctaText, setCtaText] = useState("");
   const [ctaLink, setCtaLink] = useState("");
   const [bannerImage, setBannerImage] = useState(null);
+  const [bannerPreview, setBannerPreview] = useState(null);
 
   const [speakers, setSpeakers] = useState([
-    { name: "", designation: "", bio: "", photo: null },
+    { name: "", designation: "", bio: "", photo: null, photoPreview: null },
   ]);
 
   const [schedules, setSchedules] = useState([
@@ -29,7 +30,7 @@ export default function CreateEvent() {
   const addSpeaker = () => {
     setSpeakers([
       ...speakers,
-      { name: "", designation: "", bio: "", photo: null },
+      { name: "", designation: "", bio: "", photo: null, photoPreview: null },
     ]);
   };
 
@@ -37,6 +38,38 @@ export default function CreateEvent() {
     const updated = [...speakers];
     updated[index][field] = value;
     setSpeakers(updated);
+  };
+
+  const handleBannerImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setBannerImage(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setBannerPreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleSpeakerPhotoChange = (index, e) => {
+    const file = e.target.files[0];
+    if (file) {
+      updateSpeaker(index, "photo", file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        updateSpeaker(index, "photoPreview", reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const removeSpeaker = (index) => {
+    setSpeakers(speakers.filter((_, i) => i !== index));
+  };
+
+  const removeSchedule = (index) => {
+    setSchedules(schedules.filter((_, i) => i !== index));
   };
 
   /* ----------------------------
@@ -128,7 +161,8 @@ export default function CreateEvent() {
     setCtaText("");
     setCtaLink("");
     setBannerImage(null);
-    setSpeakers([{ name: "", designation: "", bio: "", photo: null }]);
+    setBannerPreview(null);
+    setSpeakers([{ name: "", designation: "", bio: "", photo: null, photoPreview: null }]);
     setSchedules([{ time: "", title: "", description: "" }]);
   }
 
@@ -173,56 +207,121 @@ export default function CreateEvent() {
             required
           />
 
-          <h3>Banner Image</h3>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => setBannerImage(e.target.files[0])}
-          />
-
-          <h3>Speakers</h3>
-          {speakers.map((speaker, index) => (
-            <div key={index} className={styles.block}>
-              <input
-                placeholder="Name"
-                value={speaker.name}
-                onChange={(e) => updateSpeaker(index, "name", e.target.value)}
-              />
-              <input
-                placeholder="Designation"
-                value={speaker.designation}
-                onChange={(e) =>
-                  updateSpeaker(index, "designation", e.target.value)
-                }
-              />
-              <textarea
-                placeholder="Bio"
-                value={speaker.bio}
-                onChange={(e) => updateSpeaker(index, "bio", e.target.value)}
-              />
+          <div className={styles.fileUploadSection}>
+            <h3>Banner Image</h3>
+            <label className={styles.fileUploadLabel}>
               <input
                 type="file"
                 accept="image/*"
-                onChange={(e) =>
-                  updateSpeaker(index, "photo", e.target.files[0])
-                }
+                onChange={handleBannerImageChange}
+                className={styles.fileInput}
               />
+              <div className={styles.fileUploadButton}>
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                </svg>
+                {bannerImage ? "Change Banner Image" : "Upload Banner Image"}
+              </div>
+              {bannerImage && (
+                <span className={styles.fileName}>{bannerImage.name}</span>
+              )}
+            </label>
+            {bannerPreview && (
+              <div className={styles.imagePreview}>
+                <img src={bannerPreview} alt="Banner preview" />
+              </div>
+            )}
+          </div>
+
+          <div className={styles.sectionHeader}>
+            <h3>Speakers</h3>
+            <button type="button" onClick={addSpeaker} className={styles.addBtn}>
+              + Add Speaker
+            </button>
+          </div>
+          {speakers.map((speaker, index) => (
+            <div key={index} className={styles.block}>
+              <div className={styles.blockHeader}>
+                <h4>Speaker {index + 1}</h4>
+                {speakers.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => removeSpeaker(index)}
+                    className={styles.removeBtn}
+                  >
+                    Remove
+                  </button>
+                )}
+              </div>
+              <div className={styles.speakerGrid}>
+                <div className={styles.speakerInfo}>
+                  <input
+                    placeholder="Speaker Name"
+                    value={speaker.name}
+                    onChange={(e) => updateSpeaker(index, "name", e.target.value)}
+                  />
+                  <input
+                    placeholder="Designation (e.g., CEO, Developer)"
+                    value={speaker.designation}
+                    onChange={(e) =>
+                      updateSpeaker(index, "designation", e.target.value)
+                    }
+                  />
+                  <textarea
+                    placeholder="Speaker Bio"
+                    value={speaker.bio}
+                    onChange={(e) => updateSpeaker(index, "bio", e.target.value)}
+                  />
+                </div>
+                <div className={styles.speakerPhoto}>
+                  <label className={styles.fileUploadLabel}>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => handleSpeakerPhotoChange(index, e)}
+                      className={styles.fileInput}
+                    />
+                    <div className={styles.fileUploadButtonSmall}>
+                      {speaker.photo ? "Change Photo" : "Upload Photo"}
+                    </div>
+                  </label>
+                  {speaker.photoPreview && (
+                    <div className={styles.imagePreviewSmall}>
+                      <img src={speaker.photoPreview} alt="Speaker preview" />
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
           ))}
-          <button type="button" onClick={addSpeaker}>
-            + Add Speaker
-          </button>
 
-          <h3>Schedule</h3>
+          <div className={styles.sectionHeader}>
+            <h3>Schedule</h3>
+            <button type="button" onClick={addSchedule} className={styles.addBtn}>
+              + Add Schedule
+            </button>
+          </div>
           {schedules.map((item, index) => (
             <div key={index} className={styles.block}>
+              <div className={styles.blockHeader}>
+                <h4>Schedule Item {index + 1}</h4>
+                {schedules.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => removeSchedule(index)}
+                    className={styles.removeBtn}
+                  >
+                    Remove
+                  </button>
+                )}
+              </div>
               <input
-                placeholder="Time (e.g. 10:00 AM)"
+                placeholder="Time (e.g. 10:00 AM - 11:00 AM)"
                 value={item.time}
                 onChange={(e) => updateSchedule(index, "time", e.target.value)}
               />
               <input
-                placeholder="Title"
+                placeholder="Event Title"
                 value={item.title}
                 onChange={(e) => updateSchedule(index, "title", e.target.value)}
               />
@@ -235,9 +334,6 @@ export default function CreateEvent() {
               />
             </div>
           ))}
-          <button type="button" onClick={addSchedule}>
-            + Add Schedule
-          </button>
 
           <h3>Call To Action</h3>
           <input

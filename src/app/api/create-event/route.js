@@ -76,10 +76,8 @@ async function publishEntry(contentTypeUid, entryUid) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        entry: {
-          locales: ["en-us"],
-          environments: [env],
-        },
+        locales: ["en-us"],
+        environments: [env],
       }),
     },
   );
