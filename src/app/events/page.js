@@ -4,14 +4,26 @@ import CountdownTimer from "@/components/Header/CountDownTimer";
 import { getEventStatus } from "@/utils/eventStatus";
 import { sortEventsByTime } from "@/utils/sortEvents";
 import Link from "next/link";
+// import { useEffect } from "react";
+import ContentstackLivePreview from "@contentstack/live-preview-utils";
 
 export default async function EventsPage() {
   const Query = Stack.ContentType("event_ayush").Query();
   Query.descending("start_time");
   Query.toJSON();
 
-  const result = await Query.find();
-  let events = result[0] || [];
+  async function fetchEvents() {
+    const result = await Query.find();
+    return result?.[0] || [];
+  }
+
+  fetchEvents();
+
+  let events = await fetchEvents();
+
+  ContentstackLivePreview.onEntryChange(() => {
+    fetchEvents();
+  });
 
   events = sortEventsByTime(events);
 
@@ -21,10 +33,7 @@ export default async function EventsPage() {
 
       <div className={styles.eventGrid}>
         {events.map((event) => {
-          const status = getEventStatus(
-            event.start_time,
-            event.end_time
-          );
+          const status = getEventStatus(event.start_time, event.end_time);
 
           return (
             <Link

@@ -40,23 +40,22 @@ export default async function EventDetail({ params }) {
       {/* CONTENT */}
       <main className={styles.container}>
         <p className={styles.meta}>
-          <span>📍 {event.location}</span>
-          <span>📅 {new Date(event.start_time).toLocaleDateString()}</span>
+          📍 {event.location} · 📅{" "}
+          {new Date(event.start_time).toLocaleDateString()}
         </p>
 
         <div
           className={styles.description}
           dangerouslySetInnerHTML={{ __html: event.description }}
         />
-        <div className={styles.divider} />
-        
+
         {/* SPEAKERS */}
         {event.speakers?.length > 0 && (
           <section className={styles.section}>
             <h2>Speakers</h2>
             <div className={styles.grid}>
               {event.speakers.map((speaker) => (
-                <div key={speaker.uid} className={styles.speakerCard}>
+                <div key={speaker.uid} className={styles.card}>
                   {speaker.photo?.url && (
                     <img
                       src={speaker.photo.url}
@@ -64,17 +63,14 @@ export default async function EventDetail({ params }) {
                       className={styles.speakerImage}
                     />
                   )}
-                  <div>
-                    <h3>{speaker.title}</h3>
-                    <p>{speaker.designation}</p>
-                  </div>
+                  <h3>{speaker.title}</h3>
+                  <p>{speaker.designation}</p>
                 </div>
               ))}
             </div>
           </section>
         )}
 
-        <div className={styles.divider} />
         {/* SCHEDULE */}
         {event.schedule?.length > 0 && (
           <section className={styles.section}>
