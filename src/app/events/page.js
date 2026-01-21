@@ -1,13 +1,9 @@
-"use client";
-
 import Stack from "../lib/contentstack";
 import styles from "./page.module.css";
 import CountdownTimer from "@/components/Header/CountDownTimer";
 import { getEventStatus } from "@/utils/eventStatus";
 import { sortEventsByTime } from "@/utils/sortEvents";
-import { onEntryChange } from "@/utils/entryChange";
 import Link from "next/link";
-import { useEffect } from "react";
 
 export default async function EventsPage() {
   const Query = Stack.ContentType("event_ayush").Query();
@@ -20,12 +16,6 @@ export default async function EventsPage() {
   }
 
   fetchEvents();
-
-  useEffect(() => {
-    onEntryChange(() => {
-      fetchEvents();
-    });
-  }, [])
 
   let events = await fetchEvents();
 
