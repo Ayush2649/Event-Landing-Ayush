@@ -20,22 +20,15 @@ export async function POST() {
 
   const data = await res.json();
 
-  const records = (data.entries || []).map((event) => ({
-    objectID: event.uid,
-    title: event.title,
-    location: event.location,
-    slug: event.slug,
-    start_time: event.start_time,
-    end_time: event.end_time,
-
-    // ✅ ADD THIS
-    banner_image: event.banner_image
-      ? {
-          url: event.banner_image.url,
-        }
-      : null,
-
-    short_description: event.short_description || "",
+  const records = (data.entries || []).map((entry) => ({
+    objectID: entry.uid,
+    _content_type: "event_ayush",
+    title: entry.title,
+    slug: entry.slug,
+    short_description: entry.short_description || "",
+    start_time: entry.start_time,
+    end_time: entry.end_time,
+    banner_image: entry.banner_image ? { url: entry.banner_image.url } : null,
   }));
 
   await index.saveObjects(records);

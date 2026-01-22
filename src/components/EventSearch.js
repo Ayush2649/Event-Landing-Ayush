@@ -4,8 +4,9 @@ import { InstantSearch, SearchBox, Hits } from "react-instantsearch";
 import { searchClient } from "../app/lib/algolia";
 import CountdownTimer from "./Header/CountDownTimer";
 import { getEventStatus } from "../utils/eventStatus";
-import { sortEventsByTime } from "../utils/sortEvents";
+import { Configure } from "react-instantsearch";
 import styles from "./EventSearch.module.css";
+
 
 function EventCard({ hit }) {
   const status = getEventStatus(hit.start_time, hit.end_time);
@@ -27,9 +28,7 @@ function EventCard({ hit }) {
           {status === "ended" && "Ended"}
         </span>
 
-        {status === "upcoming" && (
-          <CountdownTimer eventDate={hit.start_time} />
-        )}
+        {status === "upcoming" && <CountdownTimer eventDate={hit.start_time} />}
 
         {status === "live" && <p className={styles.liveText}>🔴 Live Now</p>}
 
@@ -46,7 +45,8 @@ function EventCard({ hit }) {
 export default function EventSearch() {
   return (
     <InstantSearch searchClient={searchClient} indexName="events">
-      {/* 🔥 Card wrapper */}
+      <Configure filters='_content_type:"event_ayush"' />
+
       <div className={styles.searchCard}>
         <SearchBox placeholder="Search events..." />
 
