@@ -4,6 +4,13 @@
   padding: 4rem 2rem;
 }
 
+.sectionTitle {
+  margin: 2.5rem 0 1.5rem;
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
 .page h1 {
   text-align: center;
   font-size: 2.4rem;
@@ -38,6 +45,11 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 2rem;
+}
+
+.searchBarWrapper {
+  max-width: 600px;
+  margin: 0 auto 2.5rem;
 }
 
 /* 🧱 Individual card wrapper */
@@ -136,4 +148,32 @@
 .eventContent h3 {
   font-size: 1.2rem;
   margin-bottom: 0.5rem;
+}
+
+.filterBar {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  margin: 1.5rem 0 2rem;
+  flex-wrap: wrap;
+}
+
+.filterBtn {
+  padding: 0.45rem 1rem;
+  border-radius: 999px;
+  border: 1px solid #cbd5e1;
+  background: white;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.filterBtn:hover {
+  background: #f1f5f9;
+}
+
+.active {
+  background: #2563eb;
+  color: white;
+  border-color: #2563eb;
 }

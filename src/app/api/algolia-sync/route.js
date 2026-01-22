@@ -23,6 +23,7 @@ export async function POST() {
   const records = (data.entries || []).map((entry) => ({
     objectID: entry.uid,
     _content_type: "event_ayush",
+    category: entry.category || "general",
     title: entry.title,
     slug: entry.slug,
     short_description: entry.short_description || "",
