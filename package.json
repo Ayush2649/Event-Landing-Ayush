@@ -10,12 +10,16 @@
   },
   "dependencies": {
     "@contentstack/live-preview-utils": "^4.2.0",
+    "algoliasearch": "^4.25.3",
     "contentstack": "^3.26.3",
     "next": "16.1.1",
     "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react-dom": "19.2.3",
+    "react-instantsearch": "^7.22.1"
   },
   "devDependencies": {
+    "@types/node": "25.0.10",
+    "@types/react": "19.2.9",
     "autoprefixer": "^10.4.23",
     "eslint": "^9",
     "eslint-config-next": "16.1.1"

@@ -1,6 +1,6 @@
 import Stack from "../../lib/contentstack";
 import styles from "./page.module.css";
-import Header from "@/components/Header/Header";
+import Header from "../../../components/Header/Header";
 
 export default async function EventDetail({ params }) {
   const { slug } = await params;

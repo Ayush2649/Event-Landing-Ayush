@@ -16,9 +16,6 @@ const geistMono = Geist_Mono({
 export const metadata = {
   title: "Eventify",
   description: "Smart Event Management Platform",
-  icons: {
-    icon: "/favicon.png",
-  },
 };
 
 export default function RootLayout({ children }) {
