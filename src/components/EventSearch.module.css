@@ -5,7 +5,7 @@
 }
 
 .sectionTitle {
-  margin: 2.5rem 0 1.5rem;
+  margin: 0 auto 2rem 6rem;
   font-size: 1.6rem;
   font-weight: 600;
   color: #1f2937;
@@ -124,9 +124,13 @@
 }
 
 .eventCard {
-  display: block;
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
   text-decoration: none;
   color: inherit;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .eventCard:hover {
@@ -134,15 +138,79 @@
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
 }
 
+.imageWrapper {
+  position: relative;
+}
+
 .eventImage {
   width: 100%;
-  height: 180px;
+  height: 190px;
   object-fit: cover;
+}
+
+.badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 4px 10px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 999px;
+  text-transform: capitalize;
+}
+
+.upcoming {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.live {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.ended {
   background: #e5e7eb;
+  color: #374151;
 }
 
 .eventContent {
-  padding: 1.5rem;
+  padding: 1rem 1.25rem 1.25rem;
+}
+
+/* TITLE – closer to image */
+.eventTitle {
+  margin: 0 0 0.4rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+/* META ROW */
+.metaRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin-bottom: 0.6rem;
+}
+
+.location {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* DESCRIPTION – one line */
+.description {
+  font-size: 0.9rem;
+  color: #4b5563;
+  line-height: 1.4;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .eventContent h3 {

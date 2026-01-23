@@ -108,23 +108,45 @@ function EventCard({ hit }) {
 
   return (
     <a href={`/events/${hit.slug}`} className={styles.eventCard}>
+      {/* IMAGE */}
       {hit.banner_image?.url && (
-        <img
-          src={hit.banner_image.url}
-          alt={hit.title}
-          className={styles.eventImage}
-        />
+        <div className={styles.imageWrapper}>
+          <img
+            src={hit.banner_image.url}
+            alt={hit.title}
+            className={styles.eventImage}
+          />
+
+          {/* STATUS BADGE ON IMAGE */}
+          <span className={`${styles.badge} ${styles[status]}`}>
+            {status}
+          </span>
+        </div>
       )}
+
+      {/* CONTENT */}
       <div className={styles.eventContent}>
-        <h3>{hit.title}</h3>
+        {/* TITLE */}
+        <h3 className={styles.eventTitle}>{hit.title}</h3>
 
-        <span className={`${styles.badge} ${styles[status]}`}>
-          {status}
-        </span>
+        {/* META INFO */}
+        <div className={styles.metaRow}>
+          {hit.location && (
+            <span className={styles.location}>📍 {hit.location}</span>
+          )}
 
-        {status === "upcoming" && <CountdownTimer eventDate={hit.start_time} />}
-        {status === "live" && <p>🔴 Live Now</p>}
-        {status === "ended" && <p>Event Ended</p>}
+          {status === "upcoming" && (
+            <CountdownTimer eventDate={hit.start_time} />
+          )}
+
+          {status === "live" && <span className={styles.live}>🔴 Live</span>}
+        </div>
+
+        {/* DESCRIPTION */}
+        <p className={styles.description}>
+          {hit.short_description ||
+            "A professionally managed event powered by Contentstack."}
+        </p>
       </div>
     </a>
   );
@@ -134,17 +156,23 @@ export default function EventSearch() {
   const [interest, setInterest] = useState(null);
 
   useEffect(() => {
-    setInterest(localStorage.getItem("user_interest"));
+    const saved = localStorage.getItem("user_interest");
+    if (saved) setInterest(saved);
   }, []);
 
   const handleInterest = (value) => {
-    localStorage.setItem("user_interest", value);
-    setInterest(value);
+    if (value === "all") {
+      localStorage.removeItem("user_interest");
+      setInterest(null);
+    } else {
+      localStorage.setItem("user_interest", value);
+      setInterest(value);
+    }
   };
 
   return (
     <>
-      {/* 🔥 CATEGORY BUTTONS */}
+      {/* FILTER BUTTONS */}
       <div className={styles.filterBar}>
         {["tech", "music", "sports", "festivals"].map((cat) => (
           <button
@@ -158,32 +186,33 @@ export default function EventSearch() {
           </button>
         ))}
         <button
-          onClick={() => handleInterest(null)}
-          className={styles.filterBtn}
+          onClick={() => handleInterest("all")}
+          className={`${styles.filterBtn} ${!interest ? styles.active : ""}`}
         >
           All
         </button>
       </div>
 
-      <InstantSearch searchClient={searchClient} indexName="events">
-        <Configure filters='_content_type:"event_ayush"' />
+      {/* ================= RECOMMENDED ================= */}
+      {interest && (
+        <>
+          <h2 className={styles.sectionTitle}>Recommended for you</h2>
 
-        {/* 🔥 Recommended */}
-        {interest && (
-          <>
-            <h2 className={styles.sectionTitle}>Recommended for you</h2>
+          <InstantSearch searchClient={searchClient} indexName="events">
+            <Configure
+              filters={`_content_type:"event_ayush" AND category:"${interest}"`}
+              hitsPerPage={3}
+            />
             <div className={styles.eventGrid}>
-              <Configure
-                filters={`_content_type:"event_ayush" AND category:"${interest}"`}
-                hitsPerPage={3}
-              />
               <Hits hitComponent={EventCard} />
             </div>
-          </>
-        )}
+          </InstantSearch>
+        </>
+      )}
 
-        {/* 🔥 All Events */}
-        {/* <h2 className={styles.sectionTitle}>All Events</h2> */}
+      {/* ================= ALL EVENTS ================= */}
+      <InstantSearch searchClient={searchClient} indexName="events">
+        <Configure filters={`_content_type:"event_ayush"`} hitsPerPage={9} />
 
         <div className={styles.searchBarWrapper}>
           <SearchBox placeholder="Search events..." />

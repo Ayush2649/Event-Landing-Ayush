@@ -109,6 +109,7 @@ export async function POST(req) {
     const location = formData.get("location");
     const start_time = formData.get("start_time");
     const end_time = formData.get("end_time");
+    const category = formData.get("category");
     const description = formData.get("description");
     const cta_text = formData.get("cta_text");
     const cta_link = formData.get("cta_link");
@@ -233,6 +234,7 @@ export async function POST(req) {
       location,
       start_time,
       end_time,
+      category,
       description,
       cta_text: cta_text || "Register now",
       cta_link: cta_link || "#",

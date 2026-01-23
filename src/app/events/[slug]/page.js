@@ -17,8 +17,6 @@ export default async function EventDetail({ params }) {
     return <div className={styles.notFound}>Event not found</div>;
   }
 
-  const ctaBlock = event.landing_sections?.find((block) => block.cta_section);
-
   return (
     <>
       <Header />
@@ -92,21 +90,19 @@ export default async function EventDetail({ params }) {
         )}
 
         {/* CTA SECTION */}
-        {ctaBlock && (
+        {event.cta_text && event.cta_link && (
           <section className={styles.cta}>
             <div className={styles.ctaContent}>
-              <h2>{ctaBlock.cta_section.cta_text}</h2>
-
-              {ctaBlock.cta_section.cta_description && (
-                <p>{ctaBlock.cta_section.cta_description}</p>
-              )}
+              <h2>{event.cta_text}</h2>
 
               <div className={styles.ctaActions}>
                 <a
-                  href={ctaBlock.cta_section.cta_link}
+                  href={event.cta_link}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className={styles.primaryBtn}
                 >
-                  {ctaBlock.cta_section.cta_button_text || "Register Now"}
+                  Register Now
                 </a>
               </div>
             </div>

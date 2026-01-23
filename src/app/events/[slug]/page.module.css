@@ -148,14 +148,12 @@
 
 /* CTA SECTION */
 .cta {
-  margin-top: 5rem;
-  padding: 5rem 1.5rem;
-  background: linear-gradient(
-    135deg,
-    #0ea5e9 0%,
-    #2563eb 100%
-  );
+  margin-top: 4rem;
+  padding: 3rem;
+  background: linear-gradient(135deg, #2563eb, #1e40af);
   color: white;
+  border-radius: 20px;
+  text-align: center;
 }
 
 .ctaContent {
