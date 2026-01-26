@@ -10,7 +10,6 @@ export default function CreateEvent() {
   const [location, setLocation] = useState("");
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
-  const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
   const [ctaText, setCtaText] = useState("");
   const [ctaLink, setCtaLink] = useState("");
@@ -101,7 +100,7 @@ export default function CreateEvent() {
     formData.append("description", description);
     formData.append("cta_text", ctaText);
     formData.append("cta_link", ctaLink);
-    formData.append("category", category);
+
     if (bannerImage) {
       formData.append("banner_image", bannerImage);
     }
@@ -158,7 +157,6 @@ export default function CreateEvent() {
     setLocation("");
     setStartTime("");
     setEndTime("");
-    setCategory("");
     setDescription("");
     setCtaText("");
     setCtaLink("");
@@ -199,13 +197,6 @@ export default function CreateEvent() {
             type="datetime-local"
             value={endTime}
             onChange={(e) => setEndTime(e.target.value)}
-            required
-          />
-
-          <input
-            placeholder="Category"
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
             required
           />
 

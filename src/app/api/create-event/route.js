@@ -60,7 +60,8 @@ async function createEntry(contentTypeUid, entry) {
 async function publishEntry(contentTypeUid, entryUid) {
   if (!entryUid) return;
 
-  const env = process.env.CONTENTSTACK_ENVIRONMENT || "development";
+  const env =
+    process.env.CONTENTSTACK_ENVIRONMENT || "development";
   const shouldPublish =
     (process.env.CONTENTSTACK_AUTO_PUBLISH || "true").toLowerCase() === "true";
   if (!shouldPublish) return;
@@ -109,7 +110,6 @@ export async function POST(req) {
     const location = formData.get("location");
     const start_time = formData.get("start_time");
     const end_time = formData.get("end_time");
-    const category = formData.get("category");
     const description = formData.get("description");
     const cta_text = formData.get("cta_text");
     const cta_link = formData.get("cta_link");
@@ -226,6 +226,20 @@ export async function POST(req) {
     }
 
     /* ----------------------------
+       Landing Sections (CTA)
+    -----------------------------*/
+    const landing_sections = [];
+    if (cta_text || cta_link) {
+      landing_sections.push({
+        cta_section: {
+          cta_text: cta_text || "Register now",
+          cta_link: cta_link || "#",
+          cta_button_text: "Register Now",
+        },
+      });
+    }
+
+    /* ----------------------------
        Event Creation
     -----------------------------*/
     const entryPayload = {
@@ -234,10 +248,7 @@ export async function POST(req) {
       location,
       start_time,
       end_time,
-      category,
       description,
-      cta_text: cta_text || "Register now",
-      cta_link: cta_link || "#",
     };
 
     // For Asset fields, Contentstack expects the asset uid (or an array of uids),
@@ -245,6 +256,8 @@ export async function POST(req) {
     if (bannerImageUid) entryPayload.banner_image = bannerImageUid;
     if (speakers.length) entryPayload.speakers = speakers;
     if (schedule.length) entryPayload.schedule = schedule;
+    // Only send landing_sections if non-empty; some schemas reject empty arrays
+    if (landing_sections.length) entryPayload.landing_sections = landing_sections;
 
     const eventRes = await fetch(
       "https://api.contentstack.io/v3/content_types/event_ayush/entries",
@@ -274,7 +287,8 @@ export async function POST(req) {
         {
           success: false,
           message:
-            eventData?.error_message || "Event creation failed in Contentstack",
+            eventData?.error_message ||
+            "Event creation failed in Contentstack",
           details: eventData,
         },
         { status: eventRes.status || 400 },
@@ -283,7 +297,7 @@ export async function POST(req) {
 
     // Auto-publish event as soon as it's created (best-effort)
     try {
-      console.log("Event created (manual publish):", eventData.entry.uid);
+      await publishEntry("event_ayush", eventData.entry.uid);
     } catch (pubErr) {
       console.error("Event publish failed:", pubErr?.message, pubErr?.details);
     }

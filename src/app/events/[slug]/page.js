@@ -1,6 +1,6 @@
 import Stack from "../../lib/contentstack";
 import styles from "./page.module.css";
-import Header from "../../../components/Header/Header";
+import Header from "@/components/Header/Header";
 
 export default async function EventDetail({ params }) {
   const { slug } = await params;
@@ -16,6 +16,8 @@ export default async function EventDetail({ params }) {
   if (!event) {
     return <div className={styles.notFound}>Event not found</div>;
   }
+
+  const ctaBlock = event.landing_sections?.find((block) => block.cta_section);
 
   return (
     <>
@@ -90,19 +92,21 @@ export default async function EventDetail({ params }) {
         )}
 
         {/* CTA SECTION */}
-        {event.cta_text && event.cta_link && (
+        {ctaBlock && (
           <section className={styles.cta}>
             <div className={styles.ctaContent}>
-              <h2>{event.cta_text}</h2>
+              <h2>{ctaBlock.cta_section.cta_text}</h2>
+
+              {ctaBlock.cta_section.cta_description && (
+                <p>{ctaBlock.cta_section.cta_description}</p>
+              )}
 
               <div className={styles.ctaActions}>
                 <a
-                  href={event.cta_link}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href={ctaBlock.cta_section.cta_link}
                   className={styles.primaryBtn}
                 >
-                  Register Now
+                  {ctaBlock.cta_section.cta_button_text || "Register Now"}
                 </a>
               </div>
             </div>

@@ -22,9 +22,7 @@ function EventCard({ hit }) {
           />
 
           {/* STATUS BADGE ON IMAGE */}
-          <span className={`${styles.badge} ${styles[status]}`}>
-            {status}
-          </span>
+          <span className={`${styles.badge} ${styles[status]}`}>{status}</span>
         </div>
       )}
 
@@ -59,10 +57,44 @@ function EventCard({ hit }) {
 export default function EventSearch() {
   const [interest, setInterest] = useState(null);
 
+  // 1️⃣ Read from URL OR localStorage (once)
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const variant = params.get("_cs_p13n");
+
+    if (variant) {
+      let category = null;
+
+      if (variant.includes("tech")) category = "tech";
+      if (variant.includes("music")) category = "music";
+      if (variant.includes("sports")) category = "sports";
+      if (variant.includes("festival")) category = "festivals";
+
+      if (category) {
+        setInterest(category);
+
+        // Clean URL
+        params.delete("_cs_p13n");
+        const cleanUrl =
+          window.location.pathname +
+          (params.toString() ? `?${params.toString()}` : "");
+
+        window.history.replaceState({}, "", cleanUrl);
+        return;
+      }
+    }
+
+    // Fallback to localStorage
     const saved = localStorage.getItem("user_interest");
     if (saved) setInterest(saved);
   }, []);
+
+  // 2️⃣ Persist interest changes
+  useEffect(() => {
+    if (interest) {
+      localStorage.setItem("user_interest", interest);
+    }
+  }, [interest]);
 
   const handleInterest = (value) => {
     if (value === "all") {
@@ -72,6 +104,22 @@ export default function EventSearch() {
       localStorage.setItem("user_interest", value);
       setInterest(value);
     }
+  };
+
+  const getPersonalizeCategory = () => {
+    if (typeof window === "undefined") return null;
+
+    const params = new URLSearchParams(window.location.search);
+    const variant = params.get("_cs_p13n");
+
+    if (!variant) return null;
+
+    if (variant.includes("tech")) return "tech";
+    if (variant.includes("music")) return "music";
+    if (variant.includes("sports")) return "sports";
+    if (variant.includes("festival")) return "festivals";
+
+    return null;
   };
 
   return (
