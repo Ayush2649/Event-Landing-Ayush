@@ -1,6 +1,6 @@
 import Stack from "../../lib/contentstack";
 import styles from "./page.module.css";
-import Header from "@/components/Header/Header";
+import Header from "../../../components/Header/Header";
 
 export default async function EventDetail({ params }) {
   const { slug } = await params;
@@ -39,15 +39,22 @@ export default async function EventDetail({ params }) {
 
       {/* CONTENT */}
       <main className={styles.container}>
-        <p className={styles.meta}>
-          📍 {event.location} · 📅{" "}
-          {new Date(event.start_time).toLocaleDateString()}
-        </p>
+        <section className={styles.metaSection}>
+          <div className={styles.metaRow}>
+            <span className={styles.metaChip}>📍 {event.location}</span>
 
-        <div
-          className={styles.description}
-          dangerouslySetInnerHTML={{ __html: event.description }}
-        />
+            <span className={styles.metaChip}>
+              📅 {new Date(event.start_time).toLocaleDateString()}
+            </span>
+          </div>
+
+          <div
+            className={styles.descriptionCard}
+            dangerouslySetInnerHTML={{ __html: event.description }}
+          />
+        </section>
+
+        <div className={styles.divider} />
 
         {/* SPEAKERS */}
         {event.speakers?.length > 0 && (
@@ -91,22 +98,21 @@ export default async function EventDetail({ params }) {
           </section>
         )}
 
-        {/* CTA SECTION */}
-        {ctaBlock && (
+        <div className={styles.divider} />
+
+        {event.cta_text && event.cta_link && (
           <section className={styles.cta}>
             <div className={styles.ctaContent}>
-              <h2>{ctaBlock.cta_section.cta_text}</h2>
-
-              {ctaBlock.cta_section.cta_description && (
-                <p>{ctaBlock.cta_section.cta_description}</p>
-              )}
+              <h2>{event.cta_text}</h2>
 
               <div className={styles.ctaActions}>
                 <a
-                  href={ctaBlock.cta_section.cta_link}
+                  href={event.cta_link}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className={styles.primaryBtn}
                 >
-                  {ctaBlock.cta_section.cta_button_text || "Register Now"}
+                  Register Now
                 </a>
               </div>
             </div>
