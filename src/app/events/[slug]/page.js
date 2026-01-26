@@ -102,20 +102,10 @@ export default async function EventDetail({ params }) {
 
         {event.cta_text && event.cta_link && (
           <section className={styles.cta}>
-            <div className={styles.ctaContent}>
-              <h2>{event.cta_text}</h2>
-
-              <div className={styles.ctaActions}>
-                <a
-                  href={event.cta_link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={styles.primaryBtn}
-                >
-                  Register Now
-                </a>
-              </div>
-            </div>
+            <h2>{event.cta_text}</h2>
+            <a href={event.cta_link} className={styles.primaryBtn}>
+              Register Now
+            </a>
           </section>
         )}
       </main>

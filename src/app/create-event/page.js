@@ -162,7 +162,9 @@ export default function CreateEvent() {
     setCtaLink("");
     setBannerImage(null);
     setBannerPreview(null);
-    setSpeakers([{ name: "", designation: "", bio: "", photo: null, photoPreview: null }]);
+    setSpeakers([
+      { name: "", designation: "", bio: "", photo: null, photoPreview: null },
+    ]);
     setSchedules([{ time: "", title: "", description: "" }]);
   }
 
@@ -217,8 +219,19 @@ export default function CreateEvent() {
                 className={styles.fileInput}
               />
               <div className={styles.fileUploadButton}>
-                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                <svg
+                  width="20"
+                  height="20"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                  />
                 </svg>
                 {bannerImage ? "Change Banner Image" : "Upload Banner Image"}
               </div>
@@ -235,7 +248,11 @@ export default function CreateEvent() {
 
           <div className={styles.sectionHeader}>
             <h3>Speakers</h3>
-            <button type="button" onClick={addSpeaker} className={styles.addBtn}>
+            <button
+              type="button"
+              onClick={addSpeaker}
+              className={styles.addBtn}
+            >
               + Add Speaker
             </button>
           </div>
@@ -258,7 +275,9 @@ export default function CreateEvent() {
                   <input
                     placeholder="Speaker Name"
                     value={speaker.name}
-                    onChange={(e) => updateSpeaker(index, "name", e.target.value)}
+                    onChange={(e) =>
+                      updateSpeaker(index, "name", e.target.value)
+                    }
                   />
                   <input
                     placeholder="Designation (e.g., CEO, Developer)"
@@ -270,7 +289,9 @@ export default function CreateEvent() {
                   <textarea
                     placeholder="Speaker Bio"
                     value={speaker.bio}
-                    onChange={(e) => updateSpeaker(index, "bio", e.target.value)}
+                    onChange={(e) =>
+                      updateSpeaker(index, "bio", e.target.value)
+                    }
                   />
                 </div>
                 <div className={styles.speakerPhoto}>
@@ -297,7 +318,11 @@ export default function CreateEvent() {
 
           <div className={styles.sectionHeader}>
             <h3>Schedule</h3>
-            <button type="button" onClick={addSchedule} className={styles.addBtn}>
+            <button
+              type="button"
+              onClick={addSchedule}
+              className={styles.addBtn}
+            >
               + Add Schedule
             </button>
           </div>
@@ -336,11 +361,13 @@ export default function CreateEvent() {
           ))}
 
           <h3>Call To Action</h3>
+
           <input
             placeholder="CTA Text"
             value={ctaText}
             onChange={(e) => setCtaText(e.target.value)}
           />
+
           <input
             placeholder="CTA Link"
             value={ctaLink}

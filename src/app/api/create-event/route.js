@@ -60,8 +60,7 @@ async function createEntry(contentTypeUid, entry) {
 async function publishEntry(contentTypeUid, entryUid) {
   if (!entryUid) return;
 
-  const env =
-    process.env.CONTENTSTACK_ENVIRONMENT || "development";
+  const env = process.env.CONTENTSTACK_ENVIRONMENT || "development";
   const shouldPublish =
     (process.env.CONTENTSTACK_AUTO_PUBLISH || "true").toLowerCase() === "true";
   if (!shouldPublish) return;
@@ -226,20 +225,6 @@ export async function POST(req) {
     }
 
     /* ----------------------------
-       Landing Sections (CTA)
-    -----------------------------*/
-    const landing_sections = [];
-    if (cta_text || cta_link) {
-      landing_sections.push({
-        cta_section: {
-          cta_text: cta_text || "Register now",
-          cta_link: cta_link || "#",
-          cta_button_text: "Register Now",
-        },
-      });
-    }
-
-    /* ----------------------------
        Event Creation
     -----------------------------*/
     const entryPayload = {
@@ -249,6 +234,8 @@ export async function POST(req) {
       start_time,
       end_time,
       description,
+      cta_text: cta_text || "",
+      cta_link: cta_link || "",
     };
 
     // For Asset fields, Contentstack expects the asset uid (or an array of uids),
@@ -256,8 +243,6 @@ export async function POST(req) {
     if (bannerImageUid) entryPayload.banner_image = bannerImageUid;
     if (speakers.length) entryPayload.speakers = speakers;
     if (schedule.length) entryPayload.schedule = schedule;
-    // Only send landing_sections if non-empty; some schemas reject empty arrays
-    if (landing_sections.length) entryPayload.landing_sections = landing_sections;
 
     const eventRes = await fetch(
       "https://api.contentstack.io/v3/content_types/event_ayush/entries",
@@ -287,8 +272,7 @@ export async function POST(req) {
         {
           success: false,
           message:
-            eventData?.error_message ||
-            "Event creation failed in Contentstack",
+            eventData?.error_message || "Event creation failed in Contentstack",
           details: eventData,
         },
         { status: eventRes.status || 400 },

@@ -106,22 +106,6 @@ export default function EventSearch() {
     }
   };
 
-  const getPersonalizeCategory = () => {
-    if (typeof window === "undefined") return null;
-
-    const params = new URLSearchParams(window.location.search);
-    const variant = params.get("_cs_p13n");
-
-    if (!variant) return null;
-
-    if (variant.includes("tech")) return "tech";
-    if (variant.includes("music")) return "music";
-    if (variant.includes("sports")) return "sports";
-    if (variant.includes("festival")) return "festivals";
-
-    return null;
-  };
-
   return (
     <>
       {/* FILTER BUTTONS */}
