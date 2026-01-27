@@ -137,7 +137,7 @@ export default function EventSearch() {
           <InstantSearch searchClient={searchClient} indexName="events">
             <Configure
               filters={`_content_type:"event_ayush" AND category:"${interest}"`}
-              hitsPerPage={3}
+              hitsPerPage={10}
             />
             <div className={styles.eventGrid}>
               <Hits hitComponent={EventCard} />

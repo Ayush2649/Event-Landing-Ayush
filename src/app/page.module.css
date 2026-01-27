@@ -17,7 +17,7 @@
   margin: 0 auto;
   display: grid;
   grid-template-columns: 1.1fr 0.9fr;
-  gap: 3rem;
+  gap: 3.5rem;
   align-items: center;
 }
 
@@ -26,19 +26,23 @@
 }
 
 .heroText h1 {
-  font-size: 2.6rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
+  font-size: 3.15rem;
+  font-weight: 750;
+  line-height: 1.08;
+  margin-bottom: 1.25rem;
 }
 
 .heroText p {
-  font-size: 1.05rem;
-  opacity: 0.95;
-  margin-bottom: 2rem;
+  font-size: 1.15rem;
+  opacity: 0.96;
+  margin-bottom: 2.4rem;
+  max-width: 640px;
 }
 
 .heroImage img {
   width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
   border-radius: 16px;
   box-shadow: 0 30px 60px rgba(0, 0, 0, 0.25);
 }
@@ -49,9 +53,9 @@
   background: white;
   color: #0284c7;
   border: none;
-  padding: 0.9rem 1.8rem;
+  padding: 1rem 2.2rem;
   border-radius: 999px;
-  font-size: 0.95rem;
+  font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.25s ease;
@@ -254,4 +258,141 @@
   justify-content: center;
   color: white;
   margin-bottom: 1rem;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1100px) {
+  .hero {
+    padding: 5.5rem 1.5rem 4rem;
+  }
+
+  .heroInner {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 2.8rem;
+  }
+
+  .heroText h1 {
+    font-size: 2.6rem;
+  }
+
+  .heroText p {
+    margin: 0 auto 2rem;
+  }
+
+  .heroImage img {
+    max-width: 640px;
+  }
+
+  .features,
+  .featured,
+  .timeline {
+    padding: 3.5rem 1.25rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero {
+    padding: 4.5rem 1.25rem 3.25rem;
+  }
+
+  .heroText h1 {
+    font-size: 2.25rem;
+    margin-bottom: 1rem;
+  }
+
+  .heroText p {
+    font-size: 1.02rem;
+  }
+
+  .primaryBtn {
+    width: 100%;
+  }
+
+  .eventGrid {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .featureGrid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .featured,
+  .features,
+  .timeline,
+  .ctaBlock {
+    padding: 3rem 1rem;
+  }
+
+  .ctaBlock h2 {
+    font-size: 1.6rem;
+  }
+}
+
+@media (max-width: 560px) {
+  .hero {
+    padding: 4rem 1rem 3rem;
+  }
+
+  .heroText h1 {
+    font-size: 2rem;
+  }
+
+  .heroText p {
+    font-size: 0.98rem;
+    max-width: 100%;
+  }
+
+  .heroImage img {
+    max-width: 520px;
+  }
+
+  .eventGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .featureGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .timeline {
+    padding: 2.75rem 1rem;
+  }
+}
+
+/* RESPONSIVE HERO TUNING */
+@media (max-width: 1100px) {
+  .heroInner {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 3rem;
+  }
+
+  .heroText h1 {
+    font-size: 2.7rem;
+  }
+
+  .heroText p {
+    margin: 0 auto 2rem;
+  }
+
+  .heroImage img {
+    max-width: 640px;
+  }
+}
+
+@media (max-width: 720px) {
+  .heroText h1 {
+    font-size: 2.3rem;
+  }
+
+  .heroText p {
+    font-size: 1.02rem;
+  }
+
+  .primaryBtn {
+    width: 100%;
+  }
 }
