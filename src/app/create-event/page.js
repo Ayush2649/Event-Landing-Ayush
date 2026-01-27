@@ -3,6 +3,7 @@
 import { useState } from "react";
 import styles from "./page.module.css";
 import { useRouter } from "next/navigation";
+import Notification from "../../components/Notification";
 
 export default function CreateEvent() {
   const router = useRouter();
@@ -10,11 +11,13 @@ export default function CreateEvent() {
   const [location, setLocation] = useState("");
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
+  const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
   const [ctaText, setCtaText] = useState("");
   const [ctaLink, setCtaLink] = useState("");
   const [bannerImage, setBannerImage] = useState(null);
   const [bannerPreview, setBannerPreview] = useState(null);
+  const [notification, setNotification] = useState(null);
 
   const [speakers, setSpeakers] = useState([
     { name: "", designation: "", bio: "", photo: null, photoPreview: null },
@@ -97,6 +100,7 @@ export default function CreateEvent() {
     formData.append("location", location);
     formData.append("start_time", startTime);
     formData.append("end_time", endTime);
+    formData.append("category", category);
     formData.append("description", description);
     formData.append("cta_text", ctaText);
     formData.append("cta_link", ctaLink);
@@ -139,24 +143,27 @@ export default function CreateEvent() {
         ? JSON.stringify(data.details, null, 2)
         : "";
       const msg = [
-        data?.message || data?.error || "Event creation failed ❌",
-        detailsText ? `\n\nDetails:\n${detailsText}` : "",
+        data?.message || data?.error || "Event creation failed",
+        detailsText ? `\nDetails:\n${detailsText}` : "",
       ].join("");
-      alert(msg);
+      setNotification({ message: msg, type: "error" });
       console.error(data);
       return;
     }
 
-    alert("Event created successfully ✅");
+    setNotification({ message: "Event created successfully!", type: "success" });
     if (data?.event?.slug) {
-      router.push(`/events/${data.event.slug}`);
-      router.refresh();
+      setTimeout(() => {
+        router.push(`/events/${data.event.slug}`);
+        router.refresh();
+      }, 1500);
     }
 
     setTitle("");
     setLocation("");
     setStartTime("");
     setEndTime("");
+    setCategory("");
     setDescription("");
     setCtaText("");
     setCtaLink("");
@@ -170,6 +177,13 @@ export default function CreateEvent() {
 
   return (
     <main className={styles.page}>
+      {notification && (
+        <Notification
+          message={notification.message}
+          type={notification.type}
+          onClose={() => setNotification(null)}
+        />
+      )}
       <div className={styles.card}>
         <h1>Create Event</h1>
 
@@ -199,6 +213,13 @@ export default function CreateEvent() {
             type="datetime-local"
             value={endTime}
             onChange={(e) => setEndTime(e.target.value)}
+            required
+          />
+
+          <input
+            placeholder="Category (e.g. Tech, Music, Sports, Festivals)"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
             required
           />
 

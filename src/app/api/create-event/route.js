@@ -60,43 +60,32 @@ async function createEntry(contentTypeUid, entry) {
 async function publishEntry(contentTypeUid, entryUid) {
   if (!entryUid) return;
 
-  const env = process.env.CONTENTSTACK_ENVIRONMENT || "development";
-  const shouldPublish =
-    (process.env.CONTENTSTACK_AUTO_PUBLISH || "true").toLowerCase() === "true";
-  if (!shouldPublish) return;
+  const url = `https://api.contentstack.io/v3/content_types/${contentTypeUid}/entries/${entryUid}/publish`;
 
-  const res = await fetch(
-    `https://api.contentstack.io/v3/content_types/${contentTypeUid}/entries/${entryUid}/publish`,
-    {
-      method: "POST",
-      headers: {
-        api_key: process.env.CONTENTSTACK_API_KEY,
-        authorization: process.env.CONTENTSTACK_MANAGEMENT_TOKEN,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        locales: ["en-us"],
-        environments: [env],
-      }),
+  console.log("PUBLISHING:", url);
+
+  const res = await fetch(url, {
+    method: "POST",
+    headers: {
+      api_key: process.env.CONTENTSTACK_API_KEY,
+      authorization: process.env.CONTENTSTACK_MANAGEMENT_TOKEN,
+      "Content-Type": "application/json",
     },
-  );
+    body: JSON.stringify({
+      entry: {
+        publish_details: {
+          environments: ["development"],
+          locales: ["en-us"],
+        },
+      },
+    }),
+  });
+
+  const text = await res.text();
 
   if (!res.ok) {
-    let data = {};
-    try {
-      data = await res.json();
-    } catch {
-      data = {};
-    }
-    const message =
-      data?.error_message ||
-      data?.errors ||
-      `Failed to publish entry ${entryUid} for ${contentTypeUid}`;
-    const err = new Error(
-      typeof message === "string" ? message : JSON.stringify(message),
-    );
-    err.details = data;
-    throw err;
+    console.error("PUBLISH RAW RESPONSE:", text);
+    throw new Error(text);
   }
 }
 
@@ -109,6 +98,7 @@ export async function POST(req) {
     const location = formData.get("location");
     const start_time = formData.get("start_time");
     const end_time = formData.get("end_time");
+    const category = formData.get("category");
     const description = formData.get("description");
     const cta_text = formData.get("cta_text");
     const cta_link = formData.get("cta_link");
@@ -134,8 +124,10 @@ export async function POST(req) {
     const speakers = [];
     let i = 0;
 
-    while (formData.get(`speaker_name_${i}`)) {
+    while (true) {
       const name = formData.get(`speaker_name_${i}`);
+      if (!name || !name.trim()) break;
+
       const designation = formData.get(`speaker_designation_${i}`);
       const bio = formData.get(`speaker_bio_${i}`);
       const photo = formData.get(`speaker_photo_${i}`);
@@ -146,29 +138,28 @@ export async function POST(req) {
       }
 
       try {
-        // NOTE: If your speaker content type UID is not `speaker_ayush`,
-        // update it here (or tell me the UID and I’ll patch it).
         const speakerEntry = await createEntry("speaker_ayush", {
           title: name,
           designation,
           bio,
-          // For Asset fields, Contentstack expects the asset uid (or an array of uids),
-          // NOT an object like { uid }.
           photo: photoUid || undefined,
         });
 
         if (speakerEntry?.uid) {
-          // Auto-publish as soon as it's created (best-effort)
           try {
             await publishEntry("speaker_ayush", speakerEntry.uid);
           } catch (pubErr) {
             console.error(
-              "Speaker publish failed:",
+              `Speaker publish failed (uid: ${speakerEntry.uid}):`,
               pubErr?.message,
               pubErr?.details,
             );
           }
-          speakers.push({ uid: speakerEntry.uid });
+
+          speakers.push({
+            uid: speakerEntry.uid,
+            _content_type_uid: "speaker_ayush",
+          });
         }
       } catch (e) {
         console.error("Speaker creation skipped:", e?.message, e?.details);
@@ -183,39 +174,43 @@ export async function POST(req) {
     -----------------------------*/
     const schedule = [];
     let s = 0;
-    while (
-      formData.get(`schedule_time_${s}`) ||
-      formData.get(`schedule_title_${s}`) ||
-      formData.get(`schedule_description_${s}`)
-    ) {
-      const time = formData.get(`schedule_time_${s}`) || "";
-      const schedTitle = formData.get(`schedule_title_${s}`) || "";
-      const schedDesc = formData.get(`schedule_description_${s}`) || "";
 
-      if (!time && !schedTitle && !schedDesc) {
-        s++;
-        continue;
+    while (true) {
+      const time = formData.get(`schedule_time_${s}`);
+      const schedTitle = formData.get(`schedule_title_${s}`);
+      const schedDesc = formData.get(`schedule_description_${s}`);
+
+      // Stop when all fields are empty or missing
+      if (
+        (!time || !time.trim()) &&
+        (!schedTitle || !schedTitle.trim()) &&
+        (!schedDesc || !schedDesc.trim())
+      ) {
+        break;
       }
 
       try {
-        // NOTE: If your schedule content type UID is not `schedule_ayush`,
-        // update it here (or tell me and I’ll patch it).
         const scheduleEntry = await createEntry("schedule_ayush", {
-          time,
-          title: schedTitle,
-          description: schedDesc,
+          time: time || "",
+          title: schedTitle || "",
+          description: schedDesc || "",
         });
+
         if (scheduleEntry?.uid) {
           try {
             await publishEntry("schedule_ayush", scheduleEntry.uid);
           } catch (pubErr) {
             console.error(
-              "Schedule publish failed:",
+              `Schedule publish failed (uid: ${scheduleEntry.uid}):`,
               pubErr?.message,
               pubErr?.details,
             );
           }
-          schedule.push({ uid: scheduleEntry.uid });
+
+          schedule.push({
+            uid: scheduleEntry.uid,
+            _content_type_uid: "schedule_ayush",
+          });
         }
       } catch (e) {
         console.error("Schedule creation skipped:", e?.message, e?.details);
@@ -236,6 +231,7 @@ export async function POST(req) {
       description,
       cta_text: cta_text || "",
       cta_link: cta_link || "",
+      category: category || "",
     };
 
     // For Asset fields, Contentstack expects the asset uid (or an array of uids),
@@ -283,7 +279,7 @@ export async function POST(req) {
     try {
       await publishEntry("event_ayush", eventData.entry.uid);
     } catch (pubErr) {
-      console.error("Event publish failed:", pubErr?.message, pubErr?.details);
+      console.error(`Auto-publish failed for event`, pubErr?.message);
     }
 
     return NextResponse.json(

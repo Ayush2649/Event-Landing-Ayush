@@ -148,7 +148,7 @@ export default function EventSearch() {
 
       {/* ================= ALL EVENTS ================= */}
       <InstantSearch searchClient={searchClient} indexName="events">
-        <Configure filters={`_content_type:"event_ayush"`} hitsPerPage={9} />
+        <Configure filters={`_content_type:"event_ayush"`} hitsPerPage={50} />
 
         <div className={styles.searchBarWrapper}>
           <SearchBox placeholder="Search events..." />
