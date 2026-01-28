@@ -1,5 +1,6 @@
 import Stack from "./lib/contentstack";
 import styles from "./page.module.css";
+import HeroImageSlider from "./HeroImageSlider";;
 import Link from "next/link";
 
 export default async function HomePage() {
@@ -85,9 +86,7 @@ export default async function HomePage() {
             </Link>
           </div>
 
-          <div className={styles.heroImage}>
-            <img src="/product-preview.png" alt="Eventify Dashboard" />
-          </div>
+          <HeroImageSlider />
         </div>
       </section>
 

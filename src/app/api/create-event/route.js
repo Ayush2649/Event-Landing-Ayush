@@ -170,7 +170,6 @@ export async function POST(req) {
 
     /* ----------------------------
        Schedule
-       (Do not hard-fail event creation if schedule content type UID differs)
     -----------------------------*/
     const schedule = [];
     let s = 0;
@@ -180,7 +179,6 @@ export async function POST(req) {
       const schedTitle = formData.get(`schedule_title_${s}`);
       const schedDesc = formData.get(`schedule_description_${s}`);
 
-      // Stop when all fields are empty or missing
       if (
         (!time || !time.trim()) &&
         (!schedTitle || !schedTitle.trim()) &&
