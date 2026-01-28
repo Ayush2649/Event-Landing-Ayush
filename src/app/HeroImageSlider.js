@@ -7,6 +7,7 @@ const images = [
   "/product-preview.png",
   "/product-preview1.png",
   "/product-preview2.png",
+  "/product-preview3.png",
 ];
 
 export default function HeroImageSlider() {

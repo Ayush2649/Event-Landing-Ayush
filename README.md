@@ -1,36 +1,121 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 🎉 Eventify — Headless Event Management Platform
 
-## Getting Started
+![Next.js](https://img.shields.io/badge/Next.js-000000?logo=nextdotjs&logoColor=white)
+![Contentstack](https://img.shields.io/badge/Contentstack-6C47FF?logo=contentstack&logoColor=white)
+![Headless CMS](https://img.shields.io/badge/Architecture-Headless-blue)
+![Status](https://img.shields.io/badge/Status-Active-success)
 
-First, run the development server:
+Eventify is a **headless, CMS-driven event management platform** built using **Next.js** and **Contentstack**.  
+It enables users to **create, manage, auto-publish, and discover events** using a modern, scalable architecture.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🔗 Live Demo
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+👉 **Live URL:**  
+https://event-landing-ayush.eu-contentstackapps.com
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## 📌 Table of Contents
 
-To learn more about Next.js, take a look at the following resources:
+- [Project Overview](#-project-overview)
+- [Key Features](#-key-features)
+- [Tech Stack](#-tech-stack)
+- [Architecture Overview](#-architecture-overview)
+- [Content Models](#-content-models)
+- [Auto-Publish Workflow](#-auto-publish-workflow)
+- [Pages & Routes](#-pages--routes)
+- [Environment Variables](#-environment-variables)
+- [Running Locally](#-running-locally)
+- [What This Project Demonstrates](#-what-this-project-demonstrates)
+- [Future Enhancements](#-future-enhancements)
+- [Author](#-author)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🧠 Project Overview
 
-## Deploy on Vercel
+Eventify demonstrates a **real-world headless CMS implementation** where:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Content is managed independently of UI
+- Events are created dynamically with speakers and schedules
+- Publishing is fully automated
+- Search and discovery are fast and personalized
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The project reflects **production-grade CMS workflows** and best practices.
+
+---
+
+## ✨ Key Features
+
+### 🧩 Headless CMS Architecture
+- Contentstack manages structured content
+- Next.js handles all UI rendering
+- Fully decoupled frontend & CMS
+
+### ⚙️ Automated Event Creation
+- Create events via a custom UI
+- Automatically:
+  - Upload assets
+  - Create speaker entries
+  - Create schedule entries
+  - Publish all content
+
+### 🖼️ Asset Management
+- Banner images and speaker photos stored as Contentstack assets
+- Assets referenced using UIDs
+
+### 🔗 Content Relationships
+- Events reference speakers and schedules
+- Clean relational modeling
+
+### 🔍 Search & Personalization
+- Algolia-powered search
+- Category-based filtering (`tech`, `music`, `sports`, `festivals`)
+- Personalized recommendations
+
+### ⏳ Event Status Handling
+- Upcoming
+- Live
+- Past  
+Calculated using event start & end times
+
+### 📱 Responsive UI
+- Mobile-first design
+- Animated hero section
+- Smooth transitions
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Technology |
+|-----|------------|
+| Frontend | Next.js (App Router) |
+| CMS | Contentstack (Headless CMS) |
+| Search | Algolia |
+| Styling | CSS Modules |
+| Backend Logic | Next.js API Routes |
+| Deployment | Contentstack Launch |
+
+---
+
+## 🏗️ Architecture Overview
+
+```text
+Create Event UI (Next.js)
+        ↓
+API Route (/api/create-event)
+        ↓
+Contentstack CMS
+  - Assets
+  - Speakers
+  - Schedules
+  - Events
+        ↓
+Auto-Publish
+        ↓
+Next.js fetches published content
+        ↓
+Frontend renders UI

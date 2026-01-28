@@ -10,9 +10,9 @@ export default async function HomePage() {
   const Query = Stack.ContentType("event_ayush").Query();
 
   Query.containedIn("slug", [
-    "mongodb-new-product-launch",
+    "monsoon-music-night-2026",
     "contentstack-event-ayush",
-    "flowfest-2026-ayush",
+    "chhatrapati-shivaji-jayanti",
   ]);
 
   Query.toJSON();
