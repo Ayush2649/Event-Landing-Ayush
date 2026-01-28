@@ -108,6 +108,7 @@
 .statLabel {
   font-size: 0.7rem;
   color: #64748b;
+  text-align: center;
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.5px;

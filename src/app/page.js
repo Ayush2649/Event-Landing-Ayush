@@ -115,8 +115,8 @@ export default async function HomePage() {
             <div className={styles.iconWrapper}>
               <EyeIcon />
             </div>
-            <h3>Live Preview</h3>
-            <p>Preview event pages instantly before publishing.</p>
+            <h3>Personalize</h3>
+            <p>Filter events based on your preferences and interests.</p>
           </div>
 
           <div className={styles.featureCard}>
