@@ -119,3 +119,131 @@ Auto-Publish
 Next.js fetches published content
         ↓
 Frontend renders UI
+```
+
+## 📂 Content Models
+
+### 📌 Event (`event_ayush`)
+- **Title**
+- **Slug**
+- **Location**
+- **Start Time**
+- **End Time**
+- **Category**
+- **Description**
+- **CTA Text**
+- **CTA Link**
+- **Banner Image**
+- **References**
+  - Speakers
+  - Schedules
+
+---
+
+### 🎤 Speaker (`speaker_ayush`)
+- **Name**
+- **Designation**
+- **Bio**
+- **Photo**
+
+---
+
+### ⏰ Schedule (`schedule_ayush`)
+- **Time**
+- **Title**
+- **Description**
+
+---
+
+## 🔄 Auto-Publish Workflow
+
+When an event is created using the **Create Event** form:
+
+1. Banner image is uploaded to **Contentstack Assets**
+2. Speaker entries are created and **auto-published**
+3. Schedule entries are created and **auto-published**
+4. Event entry is created with references
+5. Event is **automatically published** to the environment
+
+✅ No manual CMS steps  
+✅ No broken references  
+✅ Production-ready content workflow  
+
+---
+
+## 🖥️ Pages & Routes
+
+| Route | Description |
+|------|------------|
+| `/` | Landing page |
+| `/events` | All events with search & filters |
+| `/events/[slug]` | Event details page |
+| `/create-event` | Create event form |
+| `/api/create-event` | Backend orchestration API |
+
+---
+
+## 🎨 UI Highlights
+
+- Responsive hero section with rotating preview images
+- Featured events grid
+- Category-based filtering (tech, music, sports, festivals)
+- Countdown timers for upcoming events
+- Clean, modern card-based layout
+
+---
+
+## 🔐 Environment Variables
+
+Create a `.env.local` file in the root directory:
+
+```env
+CONTENTSTACK_API_KEY=your_api_key
+CONTENTSTACK_DELIVERY_TOKEN=your_delivery_token
+CONTENTSTACK_MANAGEMENT_TOKEN=your_management_token
+CONTENTSTACK_ENVIRONMENT=development
+
+ALGOLIA_APP_ID=your_algolia_app_id
+ALGOLIA_SEARCH_KEY=your_algolia_search_key
+```
+⚠️ Do not commit this file to GitHub
+
+## ▶️ Running Locally
+
+1. git clone https://github.com/Ayush2649/Event-Landing-Ayush.git
+2. cd Event-Landing-Ayush
+3. npm install
+4. npm run dev
+
+- Open in browser: http://localhost:3000
+
+## 🎯 What This Project Demonstrates
+
+- Headless CMS architecture
+
+- Decoupled frontend & content management
+
+- Backend orchestration using API routes
+
+- Structured content modeling
+
+- Automated publishing workflows
+
+- CMS-driven frontend rendering
+
+- Scalable and maintainable design
+
+## 🚀 Future Enhancements
+
+- Authentication & role-based access
+
+- Draft preview support
+
+- Multi-language content
+
+- Event analytics dashboard
+
+## 👨‍💻 Author
+
+Ayush Sahu
+Intern Project — Exploring modern headless CMS architecture using Contentstack and Next.js
