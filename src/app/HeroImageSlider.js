@@ -4,10 +4,9 @@ import { useEffect, useState } from "react";
 import styles from "./page.module.css";
 
 const images = [
-  "/product-preview.png",
   "/product-preview1.png",
+  "/product-preview.png",
   "/product-preview2.png",
-  "/product-preview3.png",
 ];
 
 export default function HeroImageSlider() {
