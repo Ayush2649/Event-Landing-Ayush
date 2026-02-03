@@ -1,3 +1,4 @@
+"use client";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "../components/Header/Header";
@@ -12,10 +13,10 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata = {
-  title: "Eventify",
-  description: "Smart Event Management Platform",
-};
+// export const metadata = {
+//   title: "Eventify",
+//   description: "Smart Event Management Platform",
+// };
 
 export default function RootLayout({ children }) {
   return (

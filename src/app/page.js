@@ -1,9 +1,15 @@
+"use client";
 import Stack from "./lib/contentstack";
 import styles from "./page.module.css";
 import HeroImageSlider from "./HeroImageSlider";;
 import Link from "next/link";
+import {LivePreviewInit} from "./lib/livepreview";
+import { useEffect } from "react";
 
 export default async function HomePage() {
+  useEffect(() => {
+    LivePreviewInit();
+  }, []);
   /* -----------------------------------
      Fetch ONLY 3 featured events by slug
   ------------------------------------ */

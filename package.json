@@ -9,7 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@contentstack/live-preview-utils": "^4.2.0",
+    "@contentstack/live-preview-utils": "^4.2.1",
     "@contentstack/personalize-edge-sdk": "^1.0.21",
     "algoliasearch": "^4.25.3",
     "contentstack": "^3.26.3",
