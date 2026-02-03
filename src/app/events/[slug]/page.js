@@ -1,14 +1,25 @@
 import Stack from "../../lib/contentstack";
 import styles from "./page.module.css";
 import Header from "../../../components/Header/Header";
+import EventDetailWithLivePreview from "./EventDetailWithLivePreview";
+import { isLivePreviewEnabled } from "../../../utils/livePreview";
 
-export default async function EventDetail({ params }) {
+export default async function EventDetail({ params, searchParams }) {
   const { slug } = await params;
+  const resolvedSearchParams = await searchParams;
+
+  // Check if Live Preview is enabled
+  const isPreview = isLivePreviewEnabled(resolvedSearchParams);
 
   const Query = Stack.ContentType("event_ayush").Query();
   Query.where("slug", slug);
   Query.includeReference(["speakers", "schedule"]);
   Query.toJSON();
+
+  // If in preview mode, include preview-specific options
+  if (isPreview) {
+    Query.includeContentType();
+  }
 
   const result = await Query.find();
   const event = result?.[0]?.[0];
@@ -17,8 +28,12 @@ export default async function EventDetail({ params }) {
     return <div className={styles.notFound}>Event not found</div>;
   }
 
-  const ctaBlock = event.landing_sections?.find((block) => block.cta_section);
+  // If Live Preview is enabled, use the client component wrapper
+  if (isPreview) {
+    return <EventDetailWithLivePreview initialEvent={event} />;
+  }
 
+  // Regular server-side rendering for non-preview mode
   return (
     <>
       <Header />
