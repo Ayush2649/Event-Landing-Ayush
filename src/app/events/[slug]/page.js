@@ -1,20 +1,81 @@
+"use client";
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
 import Stack from "../../lib/contentstack";
+import { LivePreviewInit, onEntryChange } from "../../lib/livepreview";
 import styles from "./page.module.css";
 import Header from "../../../components/Header/Header";
 
-export default async function EventDetail({ params }) {
-  const { slug } = await params;
+export default function EventDetail() {
+  const params = useParams();
+  const slug = params.slug;
+  const [event, setEvent] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const Query = Stack.ContentType("event_ayush").Query();
-  Query.where("slug", slug);
-  Query.includeReference(["speakers", "schedule"]);
-  Query.toJSON();
+  useEffect(() => {
+    LivePreviewInit();
 
-  const result = await Query.find();
-  const event = result?.[0]?.[0];
+    async function fetchEvent() {
+      try {
+        setLoading(true);
+        const Query = Stack.ContentType("event_ayush").Query();
+        Query.where("slug", slug);
+        Query.includeReference(["speakers", "schedule"]);
+        Query.toJSON();
+
+        const result = await Query.find();
+        setEvent(result?.[0]?.[0]);
+        setError(null);
+      } catch (err) {
+        console.error("Error fetching event:", err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchEvent();
+
+    // Set up live preview entry change listener
+    const unsubscribe = onEntryChange(() => {
+      console.log("Entry changed, refetching event...");
+      fetchEvent();
+    });
+
+    // Cleanup listener on unmount
+    return () => {
+      if (unsubscribe && typeof unsubscribe === 'function') {
+        unsubscribe();
+      }
+    };
+  }, [slug]);
+
+  if (loading) {
+    return (
+      <>
+        <Header />
+        <div className={styles.container}>Loading event...</div>
+      </>
+    );
+  }
+
+  if (error) {
+    return (
+      <>
+        <Header />
+        <div className={styles.container}>Error: {error}</div>
+      </>
+    );
+  }
 
   if (!event) {
-    return <div className={styles.notFound}>Event not found</div>;
+    return (
+      <>
+        <Header />
+        <div className={styles.notFound}>Event not found</div>
+      </>
+    );
   }
 
   return (

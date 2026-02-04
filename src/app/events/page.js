@@ -1,18 +1,8 @@
-import Stack from "../lib/contentstack";
+"use client";
 import styles from "./page.module.css";
 import EventSearch from "../../components/EventSearch";
 
-export default async function EventsPage() {
-  const Query = Stack.ContentType("event_ayush").Query();
-  Query.descending("start_time");
-  Query.toJSON();
-
-  async function fetchEvents() {
-    const result = await Query.find();
-    return result?.[0] || [];
-  }
-
-  fetchEvents();
+export default function EventsPage() {
 
   return (
     <main className={styles.page}>

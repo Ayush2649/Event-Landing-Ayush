@@ -3,28 +3,59 @@ import Stack from "./lib/contentstack";
 import styles from "./page.module.css";
 import HeroImageSlider from "./HeroImageSlider";;
 import Link from "next/link";
-import {LivePreviewInit} from "./lib/livepreview";
-import { useEffect } from "react";
+import {LivePreviewInit, onEntryChange} from "./lib/livepreview";
+import { useEffect, useState } from "react";
 
-export default async function HomePage() {
+export default function HomePage() {
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   useEffect(() => {
     LivePreviewInit();
+
+    /* -----------------------------------
+       Fetch ONLY 3 featured events by slug
+    ------------------------------------ */
+    async function fetchEvents() {
+      try {
+        setLoading(true);
+        const Query = Stack.ContentType("event_ayush").Query();
+
+        Query.containedIn("slug", [
+          "monsoon-music-night-2026",
+          "contentstack-event-ayush",
+          "chhatrapati-shivaji-jayanti",
+        ]);
+
+        Query.toJSON();
+
+        const result = await Query.find();
+        setEvents(result[0] || []);
+        setError(null);
+      } catch (err) {
+        console.error("Error fetching events:", err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchEvents();
+
+    // Set up live preview entry change listener
+    const unsubscribe = onEntryChange(() => {
+      console.log("Entry changed, refetching events...");
+      fetchEvents();
+    });
+
+    // Cleanup listener on unmount
+    return () => {
+      if (unsubscribe && typeof unsubscribe === 'function') {
+        unsubscribe();
+      }
+    };
   }, []);
-  /* -----------------------------------
-     Fetch ONLY 3 featured events by slug
-  ------------------------------------ */
-  const Query = Stack.ContentType("event_ayush").Query();
-
-  Query.containedIn("slug", [
-    "monsoon-music-night-2026",
-    "contentstack-event-ayush",
-    "chhatrapati-shivaji-jayanti",
-  ]);
-
-  Query.toJSON();
-
-  const result = await Query.find();
-  const events = result[0] || [];
 
   function stripHtml(html = "") {
     return html.replace(/<[^>]*>?/gm, "").replace(/&nbsp;/g, " ");
@@ -137,6 +168,9 @@ export default async function HomePage() {
       {/* FEATURED EVENTS */}
       <section className={styles.featured}>
         <h2>Featured Events</h2>
+
+        {loading && <p>Loading events...</p>}
+        {error && <p className={styles.error}>Error loading events: {error}</p>}
 
         <div className={styles.eventGrid}>
           {events.map((event) => (
