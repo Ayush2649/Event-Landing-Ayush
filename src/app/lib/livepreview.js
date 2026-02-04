@@ -9,6 +9,7 @@ export function LivePreviewInit(){
     enable: true,
     ssr: false,
     stackSdk: Stack,
+    mode: "builder",
     // Enable edit button for Visual Builder
     editButton: {
       enable: true,

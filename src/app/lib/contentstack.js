@@ -13,4 +13,7 @@ const Stack = Contentstack.Stack({
   },
 });
 
+// Export the addEditableTags utility function
+export const addEditableTags = Contentstack.Utils.addEditableTags;
+
 export default Stack;

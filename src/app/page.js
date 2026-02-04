@@ -1,5 +1,5 @@
 "use client";
-import Stack from "./lib/contentstack";
+import Stack, { addEditableTags } from "./lib/contentstack";
 import styles from "./page.module.css";
 import HeroImageSlider from "./HeroImageSlider";;
 import Link from "next/link";
@@ -31,7 +31,14 @@ export default function HomePage() {
         Query.toJSON();
 
         const result = await Query.find();
-        setEvents(result[0] || []);
+        const eventEntries = result[0] || [];
+        
+        // Add editable tags to each entry for Live Preview
+        eventEntries.forEach((entry) => {
+          addEditableTags(entry, "event_ayush", true, "en-us");
+        });
+        
+        setEvents(eventEntries);
         setError(null);
       } catch (err) {
         console.error("Error fetching events:", err);
@@ -181,17 +188,17 @@ export default function HomePage() {
             >
               {event.banner_image?.url && (
                 <img
+                  {...(event.$?.banner_image ?? {})}
                   src={event.banner_image.url}
                   alt={event.title}
                   className={styles.eventImage}
-                  data-cslp={`event_ayush.${event.uid}.banner_image`}
                 />
               )}
               <div className={styles.eventContent}>
-                <h3 data-cslp={`event_ayush.${event.uid}.title`}>
+                <h3 {...(event.$?.title ?? {})}>
                   {event.title}
                 </h3>
-                <p data-cslp={`event_ayush.${event.uid}.short_description`}>
+                <p {...(event.$?.short_description ?? {})}>
                   {event.short_description ||
                     "A professionally managed event powered by Contentstack."}
                 </p>

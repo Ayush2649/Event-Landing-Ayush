@@ -29,12 +29,16 @@ function EventCard({ hit }) {
       {/* CONTENT */}
       <div className={styles.eventContent}>
         {/* TITLE */}
-        <h3 className={styles.eventTitle}>{hit.title}</h3>
+        <h3 className={styles.eventTitle}>
+          {hit.title}
+        </h3>
 
         {/* META INFO */}
         <div className={styles.metaRow}>
           {hit.location && (
-            <span className={styles.location}>📍 {hit.location}</span>
+            <span className={styles.location}>
+              📍 {hit.location}
+            </span>
           )}
 
           {status === "upcoming" && (

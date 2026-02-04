@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import Stack from "../../lib/contentstack";
+import Stack, { addEditableTags } from "../../lib/contentstack";
 import { LivePreviewInit, onEntryChange } from "../../lib/livepreview";
 import styles from "./page.module.css";
 import Header from "../../../components/Header/Header";
@@ -25,7 +25,14 @@ export default function EventDetail() {
         Query.toJSON();
 
         const result = await Query.find();
-        setEvent(result?.[0]?.[0]);
+        const eventEntry = result?.[0]?.[0];
+        
+        // Add editable tags to the entry for Live Preview
+        if (eventEntry) {
+          addEditableTags(eventEntry, "event_ayush", true, "en-us");
+        }
+        
+        setEvent(eventEntry);
         setError(null);
       } catch (err) {
         console.error("Error fetching event:", err);
@@ -88,12 +95,12 @@ export default function EventDetail() {
         style={{
           backgroundImage: `url(${event.banner_image?.url})`,
         }}
-        data-cslp={`event_ayush.${event.uid}.banner_image`}
+        {...(event.$?.banner_image ?? {})}
       >
         <div className={styles.heroOverlay} />
 
         <div className={styles.heroInner}>
-          <h1 data-cslp={`event_ayush.${event.uid}.title`}>
+          <h1 {...(event.$?.title ?? {})}>
             {event.title}
           </h1>
         </div>
@@ -103,25 +110,19 @@ export default function EventDetail() {
       <main className={styles.container}>
         <section className={styles.metaSection}>
           <div className={styles.metaRow}>
-            <span 
-              className={styles.metaChip}
-              data-cslp={`event_ayush.${event.uid}.location`}
-            >
+            <span className={styles.metaChip} {...(event.$?.location ?? {})}>
               📍 {event.location}
             </span>
 
-            <span 
-              className={styles.metaChip}
-              data-cslp={`event_ayush.${event.uid}.start_time`}
-            >
+            <span className={styles.metaChip} {...(event.$?.start_time ?? {})}>
               📅 {new Date(event.start_time).toLocaleDateString()}
             </span>
           </div>
 
           <div
             className={styles.descriptionCard}
+                        {...(event.$?.description ?? {})}
             dangerouslySetInnerHTML={{ __html: event.description }}
-            data-cslp={`event_ayush.${event.uid}.description`}
           />
         </section>
 
@@ -133,23 +134,19 @@ export default function EventDetail() {
             <h2>Speakers</h2>
             <div className={styles.grid}>
               {event.speakers.map((speaker, index) => (
-                <div 
-                  key={speaker.uid} 
-                  className={styles.card}
-                  data-cslp={`event_ayush.${event.uid}.speakers.${index}`}
-                >
+                <div key={speaker.uid} className={styles.card} {...(event.$?.[`speakers__${index}`] ?? {})}>
                   {speaker.photo?.url && (
                     <img
+                                            {...(speaker.$?.photo ?? {})}
                       src={speaker.photo.url}
                       alt={speaker.title}
                       className={styles.speakerImage}
-                      data-cslp={`speaker_ayush.${speaker.uid}.photo`}
                     />
                   )}
-                  <h3 data-cslp={`speaker_ayush.${speaker.uid}.title`}>
+                  <h3 {...(speaker.$?.title ?? {})}>
                     {speaker.title}
                   </h3>
-                  <p data-cslp={`speaker_ayush.${speaker.uid}.designation`}>
+                  <p {...(speaker.$?.designation ?? {})}>
                     {speaker.designation}
                   </p>
                 </div>
@@ -165,24 +162,17 @@ export default function EventDetail() {
 
             <div className={styles.scheduleList}>
               {event.schedule.map((item, index) => (
-                <div 
-                  key={item.uid} 
-                  className={styles.scheduleItem}
-                  data-cslp={`event_ayush.${event.uid}.schedule.${index}`}
-                >
-                  <div 
-                    className={styles.timeCol}
-                    data-cslp={`schedule_ayush.${item.uid}.time`}
-                  >
+                <div key={item.uid} className={styles.scheduleItem} {...(event.$?.[`schedule__${index}`] ?? {})}>
+                  <div className={styles.timeCol} {...(item.$?.time ?? {})}>
                     {item.time}
                   </div>
 
                   <div className={styles.contentCol}>
-                    <h4 data-cslp={`schedule_ayush.${item.uid}.title`}>
+                    <h4 {...(item.$?.title ?? {})}>
                       {item.title}
                     </h4>
                     {item.description && (
-                      <p data-cslp={`schedule_ayush.${item.uid}.description`}>
+                      <p {...(item.$?.description ?? {})}>
                         {item.description}
                       </p>
                     )}
@@ -197,14 +187,10 @@ export default function EventDetail() {
 
         {event.cta_text && event.cta_link && (
           <section className={styles.cta}>
-            <h2 data-cslp={`event_ayush.${event.uid}.cta_text`}>
+            <h2 {...(event.$?.cta_text ?? {})}>
               {event.cta_text}
             </h2>
-            <a 
-              href={event.cta_link} 
-              className={styles.primaryBtn}
-              data-cslp={`event_ayush.${event.uid}.cta_link`}
-            >
+            <a href={event.cta_link} className={styles.primaryBtn} {...(event.$?.cta_link ?? {})}>
               Register Now
             </a>
           </section>
