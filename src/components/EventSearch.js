@@ -4,6 +4,7 @@ import { InstantSearch, SearchBox, Hits, Configure } from "react-instantsearch";
 import { searchClient } from "../app/lib/algolia";
 import CountdownTimer from "./Header/CountDownTimer";
 import { getEventStatus } from "../utils/eventStatus";
+import { EventInterestButton } from "./EventInterestButton";
 import styles from "./EventSearch.module.css";
 import { useEffect, useState } from "react";
 
@@ -23,6 +24,7 @@ function EventCard({ hit }) {
 
           {/* STATUS BADGE ON IMAGE */}
           <span className={`${styles.badge} ${styles[status]}`}>{status}</span>
+          <EventInterestButton event={hit} />
         </div>
       )}
 
