@@ -184,11 +184,14 @@ export default function HomePage() {
                   src={event.banner_image.url}
                   alt={event.title}
                   className={styles.eventImage}
+                  data-cslp={`event_ayush.${event.uid}.banner_image`}
                 />
               )}
               <div className={styles.eventContent}>
-                <h3>{event.title}</h3>
-                <p>
+                <h3 data-cslp={`event_ayush.${event.uid}.title`}>
+                  {event.title}
+                </h3>
+                <p data-cslp={`event_ayush.${event.uid}.short_description`}>
                   {event.short_description ||
                     "A professionally managed event powered by Contentstack."}
                 </p>
