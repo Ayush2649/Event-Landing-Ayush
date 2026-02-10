@@ -13,22 +13,30 @@
     "@contentstack/live-preview-utils": "^4.2.1",
     "@contentstack/personalize-edge-sdk": "^1.0.21",
     "algoliasearch": "^4.25.3",
+    "bcryptjs": "^3.0.3",
     "contentstack": "^3.26.3",
+    "cookies-next": "^6.1.1",
+    "jose": "^6.1.3",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.1.6",
     "next": "16.1.1",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-instantsearch": "^7.22.1"
   },
   "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.18",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@types/jest": "^30.0.0",
     "@types/node": "25.0.10",
     "@types/react": "19.2.9",
-    "autoprefixer": "^10.4.23",
+    "autoprefixer": "^10.4.24",
     "eslint": "^9",
     "eslint-config-next": "16.1.1",
     "jest": "^30.2.0",
-    "jest-environment-jsdom": "^30.2.0"
+    "jest-environment-jsdom": "^30.2.0",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.18"
   }
 }

@@ -18,6 +18,39 @@ async function uploadAsset(file) {
   return data?.asset?.uid || null;
 }
 
+async function publishAsset(assetUid) {
+  if (!assetUid) return;
+
+  const url = `https://api.contentstack.io/v3/assets/${assetUid}/publish`;
+
+  console.log("PUBLISHING ASSET:", url);
+
+  const res = await fetch(url, {
+    method: "POST",
+    headers: {
+      api_key: process.env.CONTENTSTACK_API_KEY,
+      authorization: process.env.CONTENTSTACK_MANAGEMENT_TOKEN,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      asset: {
+        publish_details: {
+          environments: ["development"],
+          locales: ["en-us"],
+        },
+      },
+    }),
+  });
+
+  const text = await res.text();
+
+  if (!res.ok) {
+    console.error("ASSET PUBLISH RAW RESPONSE:", text);
+    // Don't throw, just log error so we don't block the whole flow
+    console.error(`Failed to publish asset ${assetUid}`);
+  }
+}
+
 async function createEntry(contentTypeUid, entry) {
   const res = await fetch(
     `https://api.contentstack.io/v3/content_types/${contentTypeUid}/entries`,
@@ -116,6 +149,9 @@ export async function POST(req) {
 
     if (bannerImage && bannerImage.size > 0) {
       bannerImageUid = await uploadAsset(bannerImage);
+      if (bannerImageUid) {
+        await publishAsset(bannerImageUid);
+      }
     }
 
     /* ----------------------------
@@ -135,6 +171,9 @@ export async function POST(req) {
       let photoUid = null;
       if (photo && photo.size > 0) {
         photoUid = await uploadAsset(photo);
+        if (photoUid) {
+          await publishAsset(photoUid);
+        }
       }
 
       try {
