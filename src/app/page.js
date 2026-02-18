@@ -23,9 +23,9 @@ export default function HomePage() {
         const Query = Stack.ContentType("event_ayush").Query();
 
         Query.containedIn("slug", [
-          "t20-world-cup-inauguration",
+          "karan-aujla-s-concert",
           "contentstack-event-ayush",
-          "chhatrapati-shivaji-jayanti",
+          "technova-2026-building-the-future-with-ai-web",
         ]);
 
         Query.toJSON();
