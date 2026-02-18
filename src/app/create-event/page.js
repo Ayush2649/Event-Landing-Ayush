@@ -156,7 +156,7 @@ export default function CreateEvent() {
       setTimeout(() => {
         router.push(`/events/${data.event.slug}`);
         router.refresh();
-      }, 1500);
+      }, 1000);
     }
 
     setTitle("");

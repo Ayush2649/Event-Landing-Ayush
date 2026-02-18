@@ -23,7 +23,7 @@ export default function HomePage() {
         const Query = Stack.ContentType("event_ayush").Query();
 
         Query.containedIn("slug", [
-          "monsoon-music-night-2026",
+          "t20-world-cup-inauguration",
           "contentstack-event-ayush",
           "chhatrapati-shivaji-jayanti",
         ]);
