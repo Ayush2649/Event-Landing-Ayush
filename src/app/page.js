@@ -158,8 +158,8 @@ export default function HomePage() {
             <div className={styles.iconWrapper}>
               <EyeIcon />
             </div>
-            <h3>Personalize</h3>
-            <p>Filter events based on your preferences and interests.</p>
+            <h3>Live Preview</h3>
+            <p>See changes in real-time as you build your event pages.</p>
           </div>
 
           <div className={styles.featureCard}>
